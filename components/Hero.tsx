@@ -35,7 +35,7 @@ export default function Hero() {
       >
         {/* Availability Badge */}
         <motion.div variants={itemVariants} className="mb-8">
-          <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+          <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-indigo-500/10 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/30 dark:border-indigo-500/20">
             <span className="w-2 h-2 bg-indigo-500 rounded-full mr-2 animate-pulse"></span>
             {personalInfo.availability}
           </span>
@@ -44,7 +44,7 @@ export default function Hero() {
         {/* Main Heading */}
         <motion.h1
           variants={itemVariants}
-          className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-zinc-100 mb-6 leading-tight"
+          className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-zinc-900 dark:text-zinc-100 mb-6 leading-tight"
         >
           Hi, I&apos;m{" "}
           <span className="bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-500 bg-clip-text text-transparent">
@@ -54,7 +54,7 @@ export default function Hero() {
 
         <motion.h2
           variants={itemVariants}
-          className="text-2xl sm:text-3xl md:text-4xl font-semibold text-zinc-400 mb-6"
+          className="text-2xl sm:text-3xl md:text-4xl font-semibold text-zinc-600 dark:text-zinc-400 mb-6"
         >
           {personalInfo.title}
         </motion.h2>
@@ -62,7 +62,7 @@ export default function Hero() {
         {/* Tagline */}
         <motion.p
           variants={itemVariants}
-          className="text-lg sm:text-xl text-zinc-400 mb-8 max-w-3xl mx-auto leading-relaxed"
+          className="text-lg sm:text-xl text-zinc-600 dark:text-zinc-400 mb-8 max-w-3xl mx-auto leading-relaxed"
         >
           {personalInfo.tagline}
         </motion.p>
@@ -70,7 +70,7 @@ export default function Hero() {
         {/* Bio */}
         <motion.p
           variants={itemVariants}
-          className="text-base sm:text-lg text-zinc-500 mb-12 max-w-2xl mx-auto"
+          className="text-base sm:text-lg text-zinc-500 dark:text-zinc-500 mb-12 max-w-2xl mx-auto"
         >
           {personalInfo.bio}
         </motion.p>
@@ -84,7 +84,7 @@ export default function Hero() {
             href={personalInfo.social.github}
             target="_blank"
             rel="noopener noreferrer"
-            className="p-3 bg-zinc-800/50 hover:bg-zinc-700 text-zinc-300 hover:text-zinc-100 rounded-lg border border-zinc-700 hover:border-indigo-500/50 transition-all duration-300 hover:scale-110"
+            className="p-3 bg-zinc-100 dark:bg-zinc-800/50 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100 rounded-lg border border-zinc-300 dark:border-zinc-700 hover:border-indigo-500 dark:hover:border-indigo-500/50 transition-all duration-300 hover:scale-110"
             aria-label="GitHub"
           >
             <Github size={24} />
@@ -93,7 +93,7 @@ export default function Hero() {
             href={personalInfo.social.linkedin}
             target="_blank"
             rel="noopener noreferrer"
-            className="p-3 bg-zinc-800/50 hover:bg-zinc-700 text-zinc-300 hover:text-zinc-100 rounded-lg border border-zinc-700 hover:border-indigo-500/50 transition-all duration-300 hover:scale-110"
+            className="p-3 bg-zinc-100 dark:bg-zinc-800/50 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100 rounded-lg border border-zinc-300 dark:border-zinc-700 hover:border-indigo-500 dark:hover:border-indigo-500/50 transition-all duration-300 hover:scale-110"
             aria-label="LinkedIn"
           >
             <Linkedin size={24} />
@@ -102,14 +102,14 @@ export default function Hero() {
             href={personalInfo.social.twitter}
             target="_blank"
             rel="noopener noreferrer"
-            className="p-3 bg-zinc-800/50 hover:bg-zinc-700 text-zinc-300 hover:text-zinc-100 rounded-lg border border-zinc-700 hover:border-indigo-500/50 transition-all duration-300 hover:scale-110"
+            className="p-3 bg-zinc-100 dark:bg-zinc-800/50 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100 rounded-lg border border-zinc-300 dark:border-zinc-700 hover:border-indigo-500 dark:hover:border-indigo-500/50 transition-all duration-300 hover:scale-110"
             aria-label="Twitter"
           >
             <Twitter size={24} />
           </a>
           <a
             href={`mailto:${personalInfo.email}`}
-            className="p-3 bg-zinc-800/50 hover:bg-zinc-700 text-zinc-300 hover:text-zinc-100 rounded-lg border border-zinc-700 hover:border-indigo-500/50 transition-all duration-300 hover:scale-110"
+            className="p-3 bg-zinc-100 dark:bg-zinc-800/50 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100 rounded-lg border border-zinc-300 dark:border-zinc-700 hover:border-indigo-500 dark:hover:border-indigo-500/50 transition-all duration-300 hover:scale-110"
             aria-label="Email"
           >
             <Mail size={24} />
@@ -137,7 +137,7 @@ export default function Hero() {
               e.preventDefault();
               document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" });
             }}
-            className="px-8 py-4 bg-zinc-800/50 hover:bg-zinc-700 text-zinc-100 font-medium rounded-lg border border-zinc-700 hover:border-indigo-500/50 transition-all duration-300"
+            className="px-8 py-4 bg-zinc-100 dark:bg-zinc-800/50 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-900 dark:text-zinc-100 font-medium rounded-lg border border-zinc-300 dark:border-zinc-700 hover:border-indigo-500 dark:hover:border-indigo-500/50 transition-all duration-300"
           >
             Get In Touch
           </a>
@@ -151,7 +151,7 @@ export default function Hero() {
           <motion.div
             animate={{ y: [0, 10, 0] }}
             transition={{ duration: 1.5, repeat: Infinity }}
-            className="text-zinc-500"
+            className="text-zinc-400 dark:text-zinc-500"
           >
             <ArrowDown size={32} />
           </motion.div>

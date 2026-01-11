@@ -4,41 +4,64 @@
 
 @layer base {
   :root {
+    --background: #ffffff;
+    --foreground: #09090b;
+  }
+
+  .dark {
     --background: #09090b;
     --foreground: #fafafa;
   }
 
   * {
-    @apply border-zinc-800;
+    @apply border-zinc-300 dark:border-zinc-800;
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground transition-colors;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 
-  /* Custom Scrollbar */
+  /* Custom Scrollbar - Light Mode */
   ::-webkit-scrollbar {
     width: 10px;
     height: 10px;
   }
 
   ::-webkit-scrollbar-track {
-    background: #09090b;
+    background: #f4f4f5;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #27272a;
+    background: #d4d4d8;
     border-radius: 5px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
+    background: #a1a1aa;
+  }
+
+  /* Custom Scrollbar - Dark Mode */
+  .dark ::-webkit-scrollbar-track {
+    background: #09090b;
+  }
+
+  .dark ::-webkit-scrollbar-thumb {
+    background: #27272a;
+    border-radius: 5px;
+  }
+
+  .dark ::-webkit-scrollbar-thumb:hover {
     background: #3f3f46;
   }
 
   /* Firefox */
   * {
     scrollbar-width: thin;
+    scrollbar-color: #d4d4d8 #f4f4f5;
+  }
+
+  .dark * {
     scrollbar-color: #27272a #09090b;
   }
 }

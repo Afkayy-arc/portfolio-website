@@ -8,12 +8,14 @@ A production-ready portfolio website for Muhammad Abdullah, Full Stack Software 
 - **TypeScript** - Full type safety across the project
 - **Tailwind CSS** - Utility-first styling with custom theme
 - **Framer Motion** - Smooth animations and transitions
-- **Bento Box Design** - Modern, clean dark-mode aesthetics
+- **Dark/Light Mode Toggle** - Theme switcher with next-themes
 - **Fully Responsive** - Mobile-first design with hamburger menu
 - **Custom Scrollbar** - Styled scrollbar matching the theme
-- **Copy Email** - One-click email copy to clipboard
-- **Optimized Images** - Using next/image for performance
-- **SEO Optimized** - Meta tags and OpenGraph support
+- **Contact Form** - Working contact form with email integration
+- **Admin Dashboard** - Manage projects, blogs, and testimonials
+- **Vercel Analytics** - Built-in analytics and speed insights
+- **SEO Optimized** - Sitemap, robots.txt, meta tags, and OpenGraph
+- **Security** - Rate limiting, spam detection, and authentication
 
 ## Project Structure
 
@@ -43,7 +45,23 @@ portfolio/
 npm install
 ```
 
-### 2. Portfolio Data
+### 2. Environment Variables
+
+Copy `.env.example` to `.env.local` and update the values:
+
+```bash
+cp .env.example .env.local
+```
+
+**IMPORTANT**: Update these values in `.env.local`:
+- `GMAIL_USER` - Your Gmail address
+- `GMAIL_APP_PASSWORD` - Generate an App Password from Google Account settings
+- `RECIPIENT_EMAIL` - Where contact form submissions should be sent
+- `ADMIN_USERNAME` - Admin dashboard username (change from default)
+- `ADMIN_PASSWORD` - Admin dashboard password (change from default)
+- `JWT_SECRET` - Random secret key (minimum 32 characters)
+
+### 3. Portfolio Data
 
 The portfolio is now fully customized with Muhammad Abdullah's information from his CV:
 - Personal info (Full Stack Software Engineer with 3+ years of experience)
@@ -52,9 +70,9 @@ The portfolio is now fully customized with Muhammad Abdullah's information from 
 - 4 Professional work experiences
 - GitHub and LinkedIn links
 
-To update data, edit `constants/data.ts`
+To update data, edit `constants/data.ts` or use the **Admin Dashboard**
 
-### 3. Add Project Images
+### 4. Add Project Images
 
 Place your project screenshots in `public/images/`:
 - project-1.jpg
@@ -63,7 +81,7 @@ Place your project screenshots in `public/images/`:
 
 Then uncomment the `<Image>` component in `components/ProjectCard.tsx` (line 42-48).
 
-### 4. Run Development Server
+### 5. Run Development Server
 
 ```bash
 npm run dev
@@ -71,7 +89,20 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-### 5. Build for Production
+### 6. Admin Dashboard
+
+Access the admin dashboard at [http://localhost:3000/admin](http://localhost:3000/admin)
+
+Default credentials (CHANGE THESE IN PRODUCTION):
+- Username: `admin`
+- Password: `admin123`
+
+From the dashboard, you can:
+- Add, edit, and delete projects
+- Create and manage blog posts
+- Add and manage testimonials
+
+### 7. Build for Production
 
 ```bash
 npm run build
@@ -122,7 +153,19 @@ Add or remove sections by editing `app/page.tsx`.
 
 1. Push your code to GitHub
 2. Import your repo on [Vercel](https://vercel.com)
-3. Deploy with one click
+3. Add environment variables in Vercel dashboard:
+   - `GMAIL_USER`
+   - `GMAIL_APP_PASSWORD`
+   - `RECIPIENT_EMAIL`
+   - `ADMIN_USERNAME`
+   - `ADMIN_PASSWORD`
+   - `JWT_SECRET`
+   - `RATE_LIMIT_MAX_REQUESTS`
+   - `RATE_LIMIT_WINDOW_MS`
+   - `NODE_ENV=production`
+4. Deploy with one click
+
+**Note**: Vercel Analytics will automatically work once deployed to Vercel. No additional configuration needed.
 
 ### Other Platforms
 
@@ -154,7 +197,21 @@ Deploy the `.next` folder to any hosting platform that supports Next.js.
 - **Styling**: Tailwind CSS
 - **Animations**: Framer Motion
 - **Icons**: Lucide React
+- **Authentication**: JWT with jose
+- **Forms**: React Hook Form + Zod
+- **Email**: Nodemailer
+- **Analytics**: Vercel Analytics & Speed Insights
 - **Deployment**: Vercel
+
+## Security Features
+
+- **Rate Limiting**: 3 requests per hour per IP for contact form
+- **Input Validation**: Zod schema validation for all forms
+- **Spam Detection**: Pattern-based spam filtering
+- **XSS Protection**: Input sanitization
+- **Authentication**: JWT-based admin authentication
+- **Session Management**: Secure HTTP-only cookies
+- **Route Protection**: Middleware-based admin route protection
 
 ## License
 

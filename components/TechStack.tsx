@@ -38,22 +38,22 @@ export default function TechStack() {
             key={skill.name}
             variants={itemVariants}
             whileHover={{ scale: 1.05, rotate: 1 }}
-            className="group relative bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-xl p-6 hover:border-indigo-500/50 transition-all duration-300 cursor-pointer"
+            className="group relative bg-white dark:bg-zinc-900/50 backdrop-blur-sm border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 hover:border-indigo-500 dark:hover:border-indigo-500/50 transition-all duration-300 cursor-pointer"
           >
             {/* Icon */}
             <div className="flex items-center justify-center mb-4">
-              <div className="p-3 bg-zinc-800/50 rounded-lg group-hover:bg-indigo-500/10 transition-colors duration-300">
-                <Icon className="w-8 h-8 text-indigo-400 group-hover:text-indigo-300 transition-colors" />
+              <div className="p-3 bg-zinc-100 dark:bg-zinc-800/50 rounded-lg group-hover:bg-indigo-100 dark:group-hover:bg-indigo-500/10 transition-colors duration-300">
+                <Icon className="w-8 h-8 text-indigo-600 dark:text-indigo-400 group-hover:text-indigo-700 dark:group-hover:text-indigo-300 transition-colors" />
               </div>
             </div>
 
             {/* Skill Name */}
-            <h3 className="text-center text-zinc-100 font-semibold mb-1">
+            <h3 className="text-center text-zinc-900 dark:text-zinc-100 font-semibold mb-1">
               {skill.name}
             </h3>
 
             {/* Category */}
-            <p className="text-center text-xs text-zinc-500 group-hover:text-zinc-400 transition-colors">
+            <p className="text-center text-xs text-zinc-500 dark:text-zinc-500 group-hover:text-zinc-600 dark:group-hover:text-zinc-400 transition-colors">
               {skill.category}
             </p>
 
