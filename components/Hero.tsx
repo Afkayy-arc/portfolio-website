@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowDown, Github, Linkedin, Mail, Twitter } from "lucide-react";
+import { ArrowDown, Github, Linkedin, Mail, Briefcase } from "lucide-react";
 import { personalInfo } from "@/constants/data";
 
 export default function Hero() {
@@ -99,13 +99,13 @@ export default function Hero() {
             <Linkedin size={24} />
           </a>
           <a
-            href={personalInfo.social.twitter}
+            href={personalInfo.social.upwork}
             target="_blank"
             rel="noopener noreferrer"
             className="p-3 bg-zinc-100 dark:bg-zinc-800/50 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100 rounded-lg border border-zinc-300 dark:border-zinc-700 hover:border-indigo-500 dark:hover:border-indigo-500/50 transition-all duration-300 hover:scale-110"
-            aria-label="Twitter"
+            aria-label="Upwork"
           >
-            <Twitter size={24} />
+            <Briefcase size={24} />
           </a>
           <a
             href={`mailto:${personalInfo.email}`}
@@ -130,6 +130,13 @@ export default function Hero() {
             className="px-8 py-4 bg-indigo-600 hover:bg-indigo-500 text-white font-medium rounded-lg transition-all duration-300 hover:scale-105 shadow-lg shadow-indigo-500/25"
           >
             View My Work
+          </a>
+          <a
+            href="/CV/Full_Stack_CV.pdf"
+            download="Muhammad_Abdullah_CV.pdf"
+            className="px-8 py-4 bg-emerald-600 hover:bg-emerald-500 text-white font-medium rounded-lg transition-all duration-300 hover:scale-105 shadow-lg shadow-emerald-500/25"
+          >
+            Download CV
           </a>
           <a
             href="#contact"

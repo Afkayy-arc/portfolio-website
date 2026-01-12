@@ -2,14 +2,15 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { FileText, Folder, MessageSquare, Plus, Edit, Trash2 } from "lucide-react";
-import type { Project, Blog, Testimonial } from "@/lib/data";
+import { FileText, Folder, MessageSquare, Plus, Edit, Trash2, Briefcase } from "lucide-react";
+import type { Project, Blog, Testimonial, Experience } from "@/lib/data";
 
 export default function AdminDashboard() {
-  const [activeTab, setActiveTab] = useState<"projects" | "blogs" | "testimonials">("projects");
+  const [activeTab, setActiveTab] = useState<"projects" | "blogs" | "testimonials" | "experiences">("projects");
   const [projects, setProjects] = useState<Project[]>([]);
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+  const [experiences, setExperiences] = useState<Experience[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -18,15 +19,17 @@ export default function AdminDashboard() {
 
   const fetchData = async () => {
     try {
-      const [projectsRes, blogsRes, testimonialsRes] = await Promise.all([
+      const [projectsRes, blogsRes, testimonialsRes, experiencesRes] = await Promise.all([
         fetch("/api/admin/projects"),
         fetch("/api/admin/blogs"),
         fetch("/api/admin/testimonials"),
+        fetch("/api/admin/experiences"),
       ]);
 
       if (projectsRes.ok) setProjects(await projectsRes.json());
       if (blogsRes.ok) setBlogs(await blogsRes.json());
       if (testimonialsRes.ok) setTestimonials(await testimonialsRes.json());
+      if (experiencesRes.ok) setExperiences(await experiencesRes.json());
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -34,7 +37,7 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleDelete = async (type: "projects" | "blogs" | "testimonials", id: string) => {
+  const handleDelete = async (type: "projects" | "blogs" | "testimonials" | "experiences", id: string) => {
     if (!confirm("Are you sure you want to delete this item?")) return;
 
     try {
@@ -53,6 +56,7 @@ export default function AdminDashboard() {
   const tabs = [
     { id: "projects", label: "Projects", icon: Folder, count: projects.length },
     { id: "blogs", label: "Blogs", icon: FileText, count: blogs.length },
+    { id: "experiences", label: "Experiences", icon: Briefcase, count: experiences.length },
     { id: "testimonials", label: "Testimonials", icon: MessageSquare, count: testimonials.length },
   ] as const;
 
@@ -121,6 +125,13 @@ export default function AdminDashboard() {
         )}
         {activeTab === "blogs" && (
           <BlogsList blogs={blogs} onDelete={(id) => handleDelete("blogs", id)} onRefresh={fetchData} />
+        )}
+        {activeTab === "experiences" && (
+          <ExperiencesList
+            experiences={experiences}
+            onDelete={(id) => handleDelete("experiences", id)}
+            onRefresh={fetchData}
+          />
         )}
         {activeTab === "testimonials" && (
           <TestimonialsList
@@ -707,6 +718,203 @@ function TestimonialForm({ testimonial, onClose }: { testimonial: Testimonial | 
             className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-800 text-white rounded-lg transition-colors"
           >
             {loading ? "Saving..." : "Save Testimonial"}
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+}
+
+function ExperiencesList({ experiences, onDelete, onRefresh }: { experiences: Experience[]; onDelete: (id: string) => void; onRefresh: () => void }) {
+  const [showForm, setShowForm] = useState(false);
+  const [editingExperience, setEditingExperience] = useState<Experience | null>(null);
+
+  const handleEdit = (experience: Experience) => {
+    setEditingExperience(experience);
+    setShowForm(true);
+  };
+
+  const handleCloseForm = () => {
+    setShowForm(false);
+    setEditingExperience(null);
+    onRefresh();
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="flex justify-between items-center">
+        <h2 className="text-xl font-semibold text-white">Manage Experiences</h2>
+        <button
+          onClick={() => setShowForm(true)}
+          className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors"
+        >
+          <Plus size={18} />
+          Add Experience
+        </button>
+      </div>
+
+      {showForm && <ExperienceForm experience={editingExperience} onClose={handleCloseForm} />}
+
+      <div className="grid gap-4">
+        {experiences.length === 0 ? (
+          <p className="text-zinc-400 text-center py-8">No experiences yet. Add your first experience!</p>
+        ) : (
+          experiences.map((experience) => (
+            <div key={experience.id} className="bg-zinc-900 border border-zinc-800 rounded-lg p-4">
+              <div className="flex justify-between items-start">
+                <div className="flex-1">
+                  <h3 className="text-lg font-semibold text-white">{experience.title}</h3>
+                  <p className="text-indigo-400 text-sm">{experience.company}</p>
+                  <p className="text-zinc-500 text-sm mt-1">{experience.period}</p>
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {experience.technologies.map((tech) => (
+                      <span
+                        key={tech}
+                        className="px-2 py-1 bg-indigo-600/20 text-indigo-400 text-xs rounded"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <div className="flex gap-2 ml-4">
+                  <button
+                    onClick={() => handleEdit(experience)}
+                    className="p-2 text-zinc-400 hover:text-indigo-400 transition-colors"
+                  >
+                    <Edit size={18} />
+                  </button>
+                  <button
+                    onClick={() => onDelete(experience.id)}
+                    className="p-2 text-zinc-400 hover:text-red-400 transition-colors"
+                  >
+                    <Trash2 size={18} />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+    </div>
+  );
+}
+
+function ExperienceForm({ experience, onClose }: { experience: Experience | null; onClose: () => void }) {
+  const [formData, setFormData] = useState({
+    title: experience?.title || "",
+    company: experience?.company || "",
+    period: experience?.period || "",
+    description: experience?.description.join("\n") || "",
+    technologies: experience?.technologies.join(", ") || "",
+  });
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const payload = {
+        title: formData.title,
+        company: formData.company,
+        period: formData.period,
+        description: formData.description.split("\n").filter(Boolean),
+        technologies: formData.technologies.split(",").map((tech) => tech.trim()).filter(Boolean),
+        ...(experience && { id: experience.id }),
+      };
+
+      const response = await fetch("/api/admin/experiences", {
+        method: experience ? "PUT" : "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (response.ok) {
+        onClose();
+      }
+    } catch (error) {
+      console.error("Error saving experience:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6 mb-4">
+      <h3 className="text-lg font-semibold text-white mb-4">
+        {experience ? "Edit Experience" : "Add New Experience"}
+      </h3>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium text-zinc-300 mb-2">Title</label>
+          <input
+            type="text"
+            value={formData.title}
+            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+            className="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:outline-none focus:border-indigo-500"
+            required
+          />
+        </div>
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-zinc-300 mb-2">Company</label>
+            <input
+              type="text"
+              value={formData.company}
+              onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+              className="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:outline-none focus:border-indigo-500"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-zinc-300 mb-2">Period</label>
+            <input
+              type="text"
+              value={formData.period}
+              onChange={(e) => setFormData({ ...formData, period: e.target.value })}
+              className="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:outline-none focus:border-indigo-500"
+              placeholder="e.g., Jan 2023 - Present"
+              required
+            />
+          </div>
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-zinc-300 mb-2">Description (one per line)</label>
+          <textarea
+            value={formData.description}
+            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+            className="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:outline-none focus:border-indigo-500"
+            rows={6}
+            placeholder="Enter each responsibility on a new line"
+            required
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-zinc-300 mb-2">Technologies (comma-separated)</label>
+          <input
+            type="text"
+            value={formData.technologies}
+            onChange={(e) => setFormData({ ...formData, technologies: e.target.value })}
+            className="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:outline-none focus:border-indigo-500"
+            placeholder="React, Node.js, MongoDB"
+            required
+          />
+        </div>
+        <div className="flex gap-3 justify-end">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-white rounded-lg transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            disabled={loading}
+            className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-800 text-white rounded-lg transition-colors"
+          >
+            {loading ? "Saving..." : "Save Experience"}
           </button>
         </div>
       </form>

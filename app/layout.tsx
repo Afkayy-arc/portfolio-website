@@ -15,6 +15,14 @@ export const metadata: Metadata = {
   description: "Portfolio of Muhammad Abdullah - Full Stack Software Engineer with 3+ years of experience building scalable web and mobile applications using MERN, Next.js, and Flutter. Expert in backend system design, frontend interactivity, and workflow automation.",
   keywords: ["developer", "full-stack", "react", "next.js", "typescript", "flutter", "mern", "n8n", "automation", "portfolio", "muhammad abdullah"],
   authors: [{ name: "Muhammad Abdullah" }],
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+    apple: [
+      { url: "/apple-icon.svg", type: "image/svg+xml" },
+    ],
+  },
   openGraph: {
     title: "Muhammad Abdullah - Full Stack Software Engineer",
     description: "Portfolio showcasing scalable web and mobile applications with expertise in MERN, Next.js, Flutter, and workflow automation",

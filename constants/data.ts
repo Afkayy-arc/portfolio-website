@@ -52,7 +52,7 @@ export const personalInfo = {
   social: {
     github: "https://github.com/Afkayyy",
     linkedin: "https://linkedin.com/in/afkayyy",
-    twitter: "https://twitter.com/afkayyy",
+    upwork: "https://www.upwork.com/freelancers/~01fbe990a14ce10108",
     portfolio: "https://github.com/Afkayyy"
   }
 };
@@ -63,7 +63,7 @@ export const projects: Project[] = [
     title: "Tickly - Seatmap & Event Management Platform",
     description: "Built comprehensive event ticketing platform from scratch with interactive drag-and-drop seat designer. Engineered real-time canvas rendering optimized for large venues (1000+ seats), integrated payment gateway, and admin dashboard with analytics. Implemented RESTful API backend handling concurrent bookings with mutex locking, reducing double-booking incidents to zero.",
     tags: ["React", "PHP", "Fabric.js", "MySQL", "Stripe"],
-    image: "/images/project-1.jpg",
+    image: "/images/Tickly Seatmap.png",
     liveUrl: "https://tickly-project.devmechanix.com",
     githubUrl: "https://github.com/Afkayyy",
     featured: true
@@ -73,7 +73,7 @@ export const projects: Project[] = [
     title: "Houdini Tickets - Interactive Ticketing Platform",
     description: "Developed real-time seatmap interface with canvas-based interactivity, supporting high concurrency with API caching and CDN optimization. Integrated Stripe payment processing and responsive UI handling 500+ simultaneous users during peak event sales.",
     tags: ["Canvas API", "React", "Caching", "Stripe", "CDN"],
-    image: "/images/project-2.jpg",
+    image: "/images/Houdini Tickets.png",
     liveUrl: "https://houdinitickets.com",
     githubUrl: "https://github.com/Afkayyy",
     featured: true
@@ -83,7 +83,7 @@ export const projects: Project[] = [
     title: "Dental Clinic Automation System",
     description: "Built end-to-end dental appointment automation using n8n workflows, integrating AI chatbot for client interaction, voice recording, and payment processing. Implemented Text-to-Speech (TTS) appointment reminders, CRM business logs, and automated follow-up sequences, reducing no-shows by 40%. Connected Google Calendar, Stripe payments, and WhatsApp notifications in unified workflow handling 200+ monthly appointments.",
     tags: ["n8n", "AI Chatbot", "TTS", "CRM", "Stripe", "WhatsApp"],
-    image: "/images/project-3.jpg",
+    image: "/images/Dental Clinic n8n Automation.png",
     liveUrl: "https://devmechanix.com",
     githubUrl: "https://github.com/Afkayyy",
     featured: true
@@ -93,7 +93,7 @@ export const projects: Project[] = [
     title: "CRM Business Interaction System",
     description: "Architected automated CRM logging system capturing client interactions across multiple channels (email, chat, phone) using n8n webhooks. Built custom dashboards aggregating interaction data with real-time sync to PostgreSQL database, enabling sales team productivity tracking.",
     tags: ["n8n", "Webhooks", "PostgreSQL", "Dashboard"],
-    image: "/images/project-4.jpg",
+    image: "/images/CRM Buisness Interaction.png",
     liveUrl: "https://github.com/Afkayyy",
     githubUrl: "https://github.com/Afkayyy",
     featured: false
@@ -103,7 +103,7 @@ export const projects: Project[] = [
     title: "MERN Blog App",
     description: "Developed full-featured blogging platform with JWT authentication, role-based access control (admin/user), and rich text editor integration. Implemented Redis caching layer reducing database queries by 60%, responsive UI, and admin analytics dashboard tracking user engagement.",
     tags: ["MongoDB", "Express", "React", "Node.js", "Redis", "JWT"],
-    image: "/images/project-5.jpg",
+    image: "/images/Mern-Blog APP.png",
     liveUrl: "https://github.com/Afkayyy",
     githubUrl: "https://github.com/Afkayyy",
     featured: false
@@ -113,7 +113,27 @@ export const projects: Project[] = [
     title: "Purrfect Assistant - AI Pet Health App",
     description: "Built cross-platform mobile app using Flutter with comprehensive Firebase integration (Authentication, Firestore, Cloud Messaging, Storage). Implemented AI breed detection, health tracking system, GPS-based vet locator, and push notification reminders for vaccinations.",
     tags: ["Flutter", "Firebase", "AI", "GPS", "Cloud Messaging"],
-    image: "/images/project-6.jpg",
+    image: "/images/Purrfect Assistant.png",
+    liveUrl: "https://github.com/Afkayyy",
+    githubUrl: "https://github.com/Afkayyy",
+    featured: false
+  },
+  {
+    id: 7,
+    title: "RAG Semantic Search System",
+    description: "Engineered RAG-based (Retrieval-Augmented Generation) semantic search system for enhanced knowledge retrieval and contextual responses. Implemented vector embeddings with efficient similarity search, optimizing query performance for large document collections. Built intelligent search interface enabling natural language queries with context-aware results.",
+    tags: ["RAG", "LangChain", "Vector DB", "NLP", "Python", "AI"],
+    image: "/images/Rag Search Bar.png",
+    liveUrl: "https://devmechanix.com",
+    githubUrl: "https://github.com/Afkayyy",
+    featured: false
+  },
+  {
+    id: 8,
+    title: "Transaction Reclassification ETL Pipeline",
+    description: "Built enterprise-grade ETL (Extract, Transform, Load) pipeline using Apache Airflow for automated transaction reclassification. Implemented data validation, transformation logic handling 100K+ daily transactions, and orchestrated multi-stage workflows with error handling and retry mechanisms. Integrated with PostgreSQL and real-time monitoring dashboards.",
+    tags: ["Apache Airflow", "Python", "ETL", "PostgreSQL", "Data Engineering"],
+    image: "/images/Transaction Reclassification ETL Pipeline.png",
     liveUrl: "https://github.com/Afkayyy",
     githubUrl: "https://github.com/Afkayyy",
     featured: false

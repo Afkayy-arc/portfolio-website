@@ -3,7 +3,6 @@ import Hero from "@/components/Hero";
 import Stats from "@/components/Stats";
 import ProjectCard from "@/components/ProjectCard";
 import TechStack from "@/components/TechStack";
-import Testimonials from "@/components/Testimonials";
 import ContactForm from "@/components/ContactForm";
 import Footer from "@/components/Footer";
 import { projects, experience } from "@/constants/data";
@@ -34,30 +33,37 @@ export default function Home() {
           </p>
         </div>
 
-        {/* Featured Projects - Bento Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          {projects
-            .filter((project) => project.featured)
-            .map((project, index) => (
-              <ProjectCard key={project.id} project={project} index={index} />
-            ))}
+        {/* Featured Projects - Horizontal Scroll */}
+        <div className="relative">
+          <div className="flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide">
+            {projects
+              .filter((project) => project.featured)
+              .map((project, index) => (
+                <div key={project.id} className="flex-none w-[85vw] md:w-[45vw] lg:w-[30vw] snap-center">
+                  <ProjectCard project={project} index={index} />
+                </div>
+              ))}
+          </div>
         </div>
 
-        {/* Other Projects */}
+        {/* Other Projects - Horizontal Scroll */}
         <div className="mt-16">
           <h3 className="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-zinc-100 mb-8">
             More Projects
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {projects
-              .filter((project) => !project.featured)
-              .map((project, index) => (
-                <ProjectCard
-                  key={project.id}
-                  project={project}
-                  index={index + projects.filter((p) => p.featured).length}
-                />
-              ))}
+          <div className="relative">
+            <div className="flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide">
+              {projects
+                .filter((project) => !project.featured)
+                .map((project, index) => (
+                  <div key={project.id} className="flex-none w-[85vw] md:w-[45vw] lg:w-[30vw] snap-center">
+                    <ProjectCard
+                      project={project}
+                      index={index + projects.filter((p) => p.featured).length}
+                    />
+                  </div>
+                ))}
+            </div>
           </div>
         </div>
       </section>
@@ -136,18 +142,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Testimonials Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-zinc-900 dark:text-zinc-100 mb-4">
-            What People Say
-          </h2>
-          <p className="text-zinc-600 dark:text-zinc-400 text-lg max-w-2xl">
-            Feedback from clients and colleagues I&apos;ve worked with.
-          </p>
-        </div>
-        <Testimonials />
-      </section>
+      {/* Testimonials Section - Removed, will be added from admin panel */}
 
       {/* Contact Form Section */}
       <section id="contact" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">

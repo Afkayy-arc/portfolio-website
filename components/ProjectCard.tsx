@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ExternalLink, Github } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import Image from "next/image";
 import { Project } from "@/constants/data";
 
@@ -24,16 +24,16 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
       <div className="relative h-48 md:h-56 overflow-hidden bg-zinc-200 dark:bg-zinc-800">
         <div className="absolute inset-0 bg-gradient-to-t from-white dark:from-zinc-900 via-transparent to-transparent z-10"></div>
 
-        {/* Placeholder gradient image - replace with actual images */}
-        <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/20 via-purple-500/20 to-pink-500/20 group-hover:scale-110 transition-transform duration-500"></div>
-
-        {/* Uncomment when you have actual images */}
-        {/* <Image
-          src={project.image}
-          alt={project.title}
-          fill
-          className="object-cover group-hover:scale-110 transition-transform duration-500"
-        /> */}
+        {project.image ? (
+          <Image
+            src={project.image}
+            alt={project.title}
+            fill
+            className="object-cover group-hover:scale-110 transition-transform duration-500"
+          />
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/20 via-purple-500/20 to-pink-500/20"></div>
+        )}
       </div>
 
       {/* Content */}
@@ -68,15 +68,6 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
           >
             <ExternalLink size={16} />
             Live Demo
-          </a>
-          <a
-            href={project.githubUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 px-4 py-2 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-900 dark:text-zinc-100 text-sm font-medium rounded-lg border border-zinc-300 dark:border-zinc-700 hover:border-indigo-500 dark:hover:border-indigo-500/50 transition-all duration-300"
-          >
-            <Github size={16} />
-            Code
           </a>
         </div>
       </div>

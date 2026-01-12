@@ -40,6 +40,16 @@ export interface Testimonial {
   createdAt: string;
 }
 
+export interface Experience {
+  id: string;
+  title: string;
+  company: string;
+  period: string;
+  description: string[];
+  technologies: string[];
+  createdAt: string;
+}
+
 async function readJSON<T>(filename: string): Promise<T[]> {
   try {
     const filePath = path.join(DATA_DIR, filename);
@@ -191,5 +201,46 @@ export async function deleteTestimonial(id: string): Promise<boolean> {
   if (filtered.length === testimonials.length) return false;
 
   await writeJSON("testimonials.json", filtered);
+  return true;
+}
+
+// Experiences
+export async function getExperiences(): Promise<Experience[]> {
+  return readJSON<Experience>("experiences.json");
+}
+
+export async function getExperienceById(id: string): Promise<Experience | null> {
+  const experiences = await getExperiences();
+  return experiences.find((e) => e.id === id) || null;
+}
+
+export async function createExperience(experience: Omit<Experience, "id" | "createdAt">): Promise<Experience> {
+  const experiences = await getExperiences();
+  const newExperience: Experience = {
+    ...experience,
+    id: Date.now().toString(),
+    createdAt: new Date().toISOString(),
+  };
+  experiences.push(newExperience);
+  await writeJSON("experiences.json", experiences);
+  return newExperience;
+}
+
+export async function updateExperience(id: string, updates: Partial<Experience>): Promise<Experience | null> {
+  const experiences = await getExperiences();
+  const index = experiences.findIndex((e) => e.id === id);
+  if (index === -1) return null;
+
+  experiences[index] = { ...experiences[index], ...updates };
+  await writeJSON("experiences.json", experiences);
+  return experiences[index];
+}
+
+export async function deleteExperience(id: string): Promise<boolean> {
+  const experiences = await getExperiences();
+  const filtered = experiences.filter((e) => e.id !== id);
+  if (filtered.length === experiences.length) return false;
+
+  await writeJSON("experiences.json", filtered);
   return true;
 }
