@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Mail, Github, Linkedin, Twitter, Check, Copy } from "lucide-react";
+import { Mail, Github, Linkedin, Briefcase, Check, Copy } from "lucide-react";
 import { personalInfo } from "@/constants/data";
 
 export default function Footer() {
@@ -44,13 +44,13 @@ export default function Footer() {
               <Linkedin size={20} />
             </a>
             <a
-              href={personalInfo.social.twitter}
+              href={personalInfo.social.upwork}
               target="_blank"
               rel="noopener noreferrer"
               className="p-3 bg-zinc-200 dark:bg-zinc-800/50 hover:bg-zinc-300 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100 rounded-lg border border-zinc-300 dark:border-zinc-700 hover:border-indigo-500 dark:hover:border-indigo-500/50 transition-all duration-300 hover:scale-110"
-              aria-label="Twitter"
+              aria-label="Upwork"
             >
-              <Twitter size={20} />
+              <Briefcase size={20} />
             </a>
           </div>
 
