@@ -75,27 +75,58 @@ export async function POST(request: NextRequest) {
   const parsed = bodySchema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) return NextResponse.json({ error: "Invalid request." }, { status: 400 });
 
-  const upstream = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:streamGenerateContent?alt=sse`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
-      body: JSON.stringify({
-        systemInstruction: { parts: [{ text: systemPrompt }] },
-        contents: parsed.data.messages.map((m) => ({ role: m.role === "user" ? "user" : "model", parts: [{ text: m.content }] })),
-        // thinkingBudget 0: Gemini flash otherwise burns the output budget on hidden reasoning and returns a few words.
-        // Note: gemini-3.6-flash rejects this field; stay on 3.5-flash or 3-flash-preview.
-        generationConfig: { maxOutputTokens: 600, temperature: 0.4, thinkingConfig: { thinkingBudget: 0 } },
-      }),
-      // Deliberately not tied to request.signal: Next can abort it mid-stream and truncate the reply.
-    }
-  );
+  // Free-tier quotas are per model per day (20 on gemini-3.5-flash as of Sep 2026), so on a quota 429 we walk
+  // a chain of models, each with its own bucket. 3.6 rejects thinkingBudget; 3.7 is slow, so it goes last.
+  const chain: { model: string; thinking?: object }[] = [
+    { model: MODEL, thinking: { thinkingBudget: 0 } },
+    { model: "gemini-3-flash-preview", thinking: { thinkingBudget: 0 } },
+    { model: "gemini-3.6-flash" },
+    { model: "gemini-3.7-flash", thinking: { thinkingBudget: 0 } },
+  ].filter((c, i, arr) => arr.findIndex((x) => x.model === c.model) === i);
 
-  if (!upstream.ok || !upstream.body) {
-    console.error("Gemini error", upstream.status, await upstream.text().catch(() => ""));
-    // Free-tier Gemini keys allow ~20 requests/minute; surface that as a retryable 429, not an outage.
-    if (upstream.status === 429) return NextResponse.json({ error: "The assistant is busy. Try again in a minute.", retryAfter: 60 }, { status: 429, headers: { "Retry-After": "60" } });
-    return NextResponse.json({ error: "The assistant is unavailable right now." }, { status: 502 });
+  const body = (thinking?: object) =>
+    JSON.stringify({
+      systemInstruction: { parts: [{ text: systemPrompt }] },
+      contents: parsed.data.messages.map((m) => ({ role: m.role === "user" ? "user" : "model", parts: [{ text: m.content }] })),
+      // thinkingBudget 0: flash models otherwise spend the output budget on hidden reasoning and return a few words.
+      generationConfig: { maxOutputTokens: 600, temperature: 0.4, ...(thinking ? { thinkingConfig: thinking } : {}) },
+    });
+
+  let upstream: Response | null = null;
+  let dailyLimit = false;
+  for (const c of chain) {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 25_000);
+    try {
+      // Deliberately not tied to request.signal: Next can abort it mid-stream and truncate the reply.
+      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${c.model}:streamGenerateContent?alt=sse`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
+        body: body(c.thinking),
+        signal: ctrl.signal,
+      });
+      if (res.ok && res.body) {
+        upstream = res;
+        break;
+      }
+      const text = await res.text().catch(() => "");
+      console.error("Gemini error", c.model, res.status, text.slice(0, 300));
+      if (res.status === 429 && /PerDay/i.test(text)) dailyLimit = true;
+      if (res.status !== 429 && res.status !== 400 && res.status < 500) break; // auth/config errors won't improve with another model
+    } catch (e) {
+      console.error("Gemini fetch failed", c.model, String(e).slice(0, 120));
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
+  if (!upstream || !upstream.body) {
+    if (dailyLimit)
+      return NextResponse.json(
+        { error: `Today's free-tier limit for the assistant is used up. Email ${personalInfo.email} or use the brief below.`, retryAfter: 3600 },
+        { status: 429, headers: { "Retry-After": "3600" } }
+      );
+    return NextResponse.json({ error: "The assistant is unavailable right now. Email works too." }, { status: 503 });
   }
 
   // Re-emit only the text deltas from Gemini's SSE stream as plain text.

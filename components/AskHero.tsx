@@ -80,10 +80,26 @@ function Card({ id }: { id: string }) {
 
 // Chips either ask the assistant, jump to a section, or answer locally (no API call, never rate-limited).
 const chips: { label: string; hue: string; ask?: string; go?: string; local?: Msg }[] = [
-  { label: "Projects", hue: "blue", ask: "What has he shipped, and which are featured?" },
+  {
+    label: "Projects",
+    hue: "blue",
+    local: {
+      role: "assistant",
+      content: `${projects.length} shipped projects across ticketing, automation, data and mobile. Three are featured — the two seat-map ticketing platforms and TapReview. Open one below, or hover the strips in Work.`,
+      cards: ["project:tickly", "project:houdini", "project:tapreview"],
+    },
+  },
   { label: "Live demos", hue: "violet", go: "demos" },
   { label: "Stack", hue: "cyan", local: { role: "assistant", content: "Front to back, grouped by where each tool sits in the system. Comfortable owning any layer end to end.", cards: ["stack"] } },
-  { label: "Availability", hue: "emerald", ask: "Is he available for freelance or full-time work?" },
+  {
+    label: "Availability",
+    hue: "emerald",
+    local: {
+      role: "assistant",
+      content: `${personalInfo.availability}. Based in ${personalInfo.location} (${personalInfo.timezone}), working remotely with teams in Europe and the US. For scoping and pricing, send a brief or email — replies within a working day.`,
+      cards: ["availability", "contact", "cv"],
+    },
+  },
   { label: "Contact", hue: "rose", go: "contact" },
 ];
 

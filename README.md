@@ -30,7 +30,7 @@ There is no top navigation. A **side rail** (`components/Rail.tsx`; a bottom bar
 Six semantic hues (`--hue-blue/violet/emerald/amber/rose/cyan`, tuned per theme in `globals.css`, exposed as `hue.*` in Tailwind, class maps in `lib/hue.ts`). Every project and demo has a `hue` in `constants/data.ts` that follows it through canvas nodes, strips, cards and thumbnails. Demo states use them semantically: seats blue = yours, amber = held, rose = sold; ETL stages and categories, clinic node states, RAG score tiers.
 - **Terminal** (`Terminal.tsx`) — press `` ` `` or the rail icon. `help`, `projects`, `open <slug>`, `demo <id>`, `stack`, `experience`, `contact`, `cv`, `ask <q>`, `theme`, `clear`.
 
-Gemini notes: `GEMINI_MODEL` defaults to `gemini-3.5-flash`; keep `thinkingConfig.thinkingBudget: 0` in the chat route or flash models spend the output budget on hidden reasoning.
+Gemini notes: `GEMINI_MODEL` defaults to `gemini-3.5-flash`; keep `thinkingConfig.thinkingBudget: 0` or flash models spend the output budget on hidden reasoning. **Free-tier keys allow only 20 requests per day per model** (`GenerateRequestsPerDayPerProjectPerModel-FreeTier`). The route walks a fallback chain (3.5-flash → 3-flash-preview → 3.6-flash → 3.7-flash) so each model's daily bucket is used, and the Projects / Stack / Availability chips answer locally without an API call. For real traffic, enable billing on the Google AI Studio project — the cap disappears and flash costs fractions of a cent per answer.
 
 ## Running
 
