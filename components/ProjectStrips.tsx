@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { projects } from "@/constants/data";
 import { on } from "@/lib/bus";
 import ProjectList from "./ProjectList";
@@ -16,7 +17,7 @@ export default function ProjectStrips() {
       <div className="md:hidden">
         <ProjectList />
       </div>
-      <div className="hidden h-[420px] gap-2.5 md:flex" role="list">
+      <div className="hidden h-[460px] gap-2.5 md:flex" role="list">
         {projects.map((p, i) => {
           const open = p.slug === active;
           return (
@@ -25,8 +26,23 @@ export default function ProjectStrips() {
               role="listitem"
               onMouseEnter={() => setActive(p.slug)}
               onFocus={() => setActive(p.slug)}
-              className={`dotgrid relative min-w-0 overflow-hidden rounded-lg border bg-gradient-to-b from-surface-2 to-surface-1 transition-[flex] duration-300 ${open ? "flex-[4.5] border-hairline-strong" : "flex-1 border-hairline"}`}
+              className={`relative min-w-0 overflow-hidden rounded-lg border bg-surface-1 transition-[flex] duration-300 ${open ? "flex-[4.5] border-hairline-strong" : "flex-1 border-hairline"}`}
             >
+              {p.image ? (
+                <Image
+                  src={p.image}
+                  alt=""
+                  fill
+                  sizes="(min-width: 1280px) 900px, 70vw"
+                  priority={i < 2}
+                  className={`object-cover transition-[opacity,filter] duration-300 ${open ? "opacity-100" : "opacity-40 grayscale"}`}
+                />
+              ) : (
+                <div className="dotgrid absolute inset-0" />
+              )}
+              {/* Legibility scrim: heavier when open (text sits on the image), light otherwise */}
+              <div className={`absolute inset-0 ${open ? "bg-gradient-to-t from-canvas via-canvas/70 to-canvas/10" : "bg-gradient-to-t from-canvas/90 via-canvas/30 to-transparent"}`} />
+
               <span className="absolute left-3 top-2.5 font-mono text-[11px] text-ink-tertiary">{String(i + 1).padStart(2, "0")}</span>
               {p.featured && !open && <span aria-hidden className="absolute right-3 top-3 size-1.5 rounded-full bg-accent" />}
 
@@ -36,7 +52,7 @@ export default function ProjectStrips() {
                     <h3 className="text-xl font-medium tracking-[-0.3px]">{p.title}</h3>
                     {p.featured && <span className="badge">Featured</span>}
                   </div>
-                  <p className="mt-2 max-w-[60ch] text-sm leading-relaxed text-ink-subtle">{p.summary}</p>
+                  <p className="mt-2 max-w-[60ch] text-sm leading-relaxed text-ink-muted">{p.summary}</p>
                   <div className="mt-3 flex flex-wrap items-center gap-1.5">
                     {p.tags.map((t) => (
                       <span key={t} className="tag">
@@ -62,7 +78,7 @@ export default function ProjectStrips() {
                 <button
                   type="button"
                   onClick={() => setActive(p.slug)}
-                  className="absolute inset-0 flex items-end justify-center pb-4 [writing-mode:vertical-rl] rotate-180 whitespace-nowrap text-xs text-ink-subtle transition-colors hover:text-ink"
+                  className="absolute inset-0 flex items-end justify-center pb-4 [writing-mode:vertical-rl] rotate-180 whitespace-nowrap text-xs text-ink-muted transition-colors hover:text-ink"
                   aria-label={`Open ${p.title}`}
                 >
                   {p.title}

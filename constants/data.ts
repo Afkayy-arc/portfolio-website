@@ -8,6 +8,7 @@ export interface Project {
   liveUrl?: string;
   repoUrl?: string;
   featured?: boolean;
+  image?: string; // public/projects/<slug>.png
 }
 
 export interface Experience {
@@ -52,6 +53,7 @@ export const metrics = [
 export const projects: Project[] = [
   {
     slug: "tickly",
+    image: "/projects/tickly.png",
     title: "Tickly",
     summary:
       "Event ticketing with a drag-and-drop seat designer. Canvas rendering stays smooth past 1,000 seats, and bookings go through a REST API with mutex locking, so double-bookings dropped to zero.",
@@ -61,6 +63,7 @@ export const projects: Project[] = [
   },
   {
     slug: "houdini",
+    image: "/projects/houdini.png",
     title: "Houdini Tickets",
     summary:
       "Real-time seat-map storefront with Stripe checkout. API caching and a CDN kept it responsive through 500+ simultaneous buyers during peak on-sales.",
@@ -70,6 +73,7 @@ export const projects: Project[] = [
   },
   {
     slug: "tapreview",
+    image: "/projects/tapreview.png",
     title: "TapReview",
     summary:
       "QR-to-Google-review flow for restaurants and clinics. Scan, rate on a half-star slider, pick a generated review in English or Urdu, copy, and land on Google's write-review page. Static site, embeddable widget, Sheets-backed analytics.",
@@ -80,6 +84,7 @@ export const projects: Project[] = [
   },
   {
     slug: "clinic",
+    image: "/projects/clinic.png",
     title: "Dental clinic automation",
     summary:
       "n8n workflows that book, remind and follow up: LLM chat intake, text-to-speech phone reminders, Stripe payments, WhatsApp notifications and Google Calendar sync. 200+ appointments a month, 40% fewer no-shows.",
@@ -87,6 +92,7 @@ export const projects: Project[] = [
   },
   {
     slug: "crm",
+    image: "/projects/crm.png",
     title: "CRM interaction logger",
     summary:
       "n8n webhooks capture email, chat and call events into PostgreSQL; dashboards give the sales team a per-rep activity view synced in real time.",
@@ -94,6 +100,7 @@ export const projects: Project[] = [
   },
   {
     slug: "mern-blog",
+    image: "/projects/mern-blog.png",
     title: "MERN blog platform",
     summary:
       "Blogging platform with JWT auth, admin and user roles, a rich-text editor, and a Redis cache layer that cut database reads by 60%.",
@@ -102,6 +109,7 @@ export const projects: Project[] = [
   },
   {
     slug: "purrfect",
+    image: "/projects/purrfect.png",
     title: "Purrfect Assistant",
     summary:
       "Flutter app for pet owners: Firebase auth and Firestore, on-device breed detection, a health log, GPS vet finder and vaccination push reminders.",
@@ -109,6 +117,7 @@ export const projects: Project[] = [
   },
   {
     slug: "rag",
+    image: "/projects/rag.png",
     title: "RAG semantic search",
     summary:
       "Retrieval-augmented search over client document sets. Vector embeddings with similarity search, natural-language queries and context-aware answers.",
@@ -116,6 +125,7 @@ export const projects: Project[] = [
   },
   {
     slug: "etl",
+    image: "/projects/etl.png",
     title: "Transaction reclassification ETL",
     summary:
       "Airflow pipeline that validates, transforms and reclassifies 100K+ daily transactions into PostgreSQL, with retries and monitoring on every stage.",

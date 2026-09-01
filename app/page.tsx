@@ -3,7 +3,6 @@ import AskHero from "@/components/AskHero";
 import DemoCanvas from "@/components/DemoCanvas";
 import ProjectStrips from "@/components/ProjectStrips";
 import BioToggle from "@/components/BioToggle";
-import TechStack from "@/components/TechStack";
 import ExperienceList from "@/components/ExperienceList";
 import ContactForm from "@/components/ContactForm";
 import CopyEmail from "@/components/CopyEmail";
@@ -74,15 +73,9 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="mt-20 grid gap-16 lg:grid-cols-2">
-              <div>
-                <p className="eyebrow mb-5">Experience</p>
-                <ExperienceList />
-              </div>
-              <div id="stack" className="scroll-mt-6">
-                <p className="eyebrow mb-5">Stack</p>
-                <TechStack />
-              </div>
+            <div className="mt-20">
+              <p className="eyebrow mb-6">Experience</p>
+              <ExperienceList />
             </div>
 
             <div id="contact" className="mt-20 scroll-mt-6 grid gap-10 md:grid-cols-[1fr_2fr] md:gap-14">

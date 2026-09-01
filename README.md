@@ -21,8 +21,8 @@ There is no top navigation. A **side rail** (`components/Rail.tsx`; a bottom bar
 
 - **Ask hero** (`AskHero.tsx`) — the AI assistant is the front door. Streams from `app/api/chat/route.ts` (Gemini, system prompt built from `constants/data.ts`, scoped to Muhammad's work, 30 msg/hour/IP). The model appends `[[cards: id, …]]`; the hero strips it and renders demo/project/contact/CV cards. `LiveStatus.tsx` shows live facts from `app/api/status/route.ts` (GitHub last commit, Open-Meteo weather; cached 10–30 min; anything that fails is omitted, never faked).
 - **Demos** (`DemoCanvas.tsx`) — n8n-style workflow canvas: drag to pan, click a node to mount that demo below. Below `lg`, and via the Canvas/List toggle, `LiveDemos.tsx` (tabbed carousel) is the fallback. Demo metadata lives in `constants/data.ts` (`demos`); components in `components/demos/`, keyed by id in `components/demos/index.ts`.
-- **Work** (`ProjectStrips.tsx`) — film-strip gallery; hover/focus widens a strip. Below `md`, `ProjectList.tsx` rows.
-- **About** — `BioToggle.tsx` (short/long), facts panel, `ExperienceList`, `TechStack`, `ContactForm`.
+- **Work** (`ProjectStrips.tsx`) — film-strip gallery with each project's image from `public/projects/<slug>.png`; hover/focus widens a strip. Below `md`, `ProjectList.tsx` rows with thumbnails.
+- **About** — `BioToggle.tsx` (short/long), facts panel, `ExperienceList` (full width), `ContactForm`. The stack lives in the hero: the Stack chip answers locally (no API call) and renders `TechStack` inline.
 - **Terminal** (`Terminal.tsx`) — press `` ` `` or the rail icon. `help`, `projects`, `open <slug>`, `demo <id>`, `stack`, `experience`, `contact`, `cv`, `ask <q>`, `theme`, `clear`.
 
 Gemini notes: `GEMINI_MODEL` defaults to `gemini-3.5-flash`; keep `thinkingConfig.thinkingBudget: 0` in the chat route or flash models spend the output budget on hidden reasoning.

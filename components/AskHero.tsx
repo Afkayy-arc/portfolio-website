@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { demos, personalInfo, projects } from "@/constants/data";
 import { emit, on, scrollToId } from "@/lib/bus";
 import LiveStatus, { useLocalClock } from "./LiveStatus";
+import TechStack from "./TechStack";
 import { Download } from "./icons";
 
 type Msg = { role: "user" | "assistant"; content: string; cards?: string[] };
@@ -64,13 +65,8 @@ function Card({ id }: { id: string }) {
         <span className="text-ink-subtle">{personalInfo.email}</span>
       </button>
     );
-  if (id === "stack")
-    return (
-      <button type="button" onClick={() => scrollToId("stack")} className={base}>
-        <b className="font-medium">Stack</b>
-        <span className="text-ink-subtle">Frontend · Backend · Data · Automation</span>
-      </button>
-    );
+  // "stack" is rendered full-width by the caller (see wide cards below); nothing to do here.
+  if (id === "stack") return null;
   if (id === "availability")
     return (
       <div className={base}>
@@ -81,10 +77,11 @@ function Card({ id }: { id: string }) {
   return null;
 }
 
-const chips: { label: string; ask?: string; go?: string }[] = [
+// Chips either ask the assistant, jump to a section, or answer locally (no API call, never rate-limited).
+const chips: { label: string; ask?: string; go?: string; local?: Msg }[] = [
   { label: "Projects", ask: "What has he shipped, and which are featured?" },
   { label: "Live demos", go: "demos" },
-  { label: "Stack", ask: "What is his stack, front to back?" },
+  { label: "Stack", local: { role: "assistant", content: "Front to back, grouped by where each tool sits in the system. Comfortable owning any layer end to end.", cards: ["stack"] } },
   { label: "Availability", ask: "Is he available for freelance or full-time work?" },
   { label: "Contact", go: "contact" },
 ];
@@ -181,7 +178,16 @@ export default function AskHero() {
 
       <div className="mt-3.5 flex flex-wrap justify-center gap-2">
         {chips.map((c) => (
-          <button key={c.label} type="button" className="chip" onClick={() => (c.go ? scrollToId(c.go) : ask(c.ask!))}>
+          <button
+            key={c.label}
+            type="button"
+            className="chip"
+            onClick={() => {
+              if (c.go) return scrollToId(c.go);
+              if (c.local) return setMessages((m) => [...m, { role: "user", content: c.label }, c.local!]);
+              ask(c.ask!);
+            }}
+          >
             {c.label}
           </button>
         ))}
@@ -197,11 +203,18 @@ export default function AskHero() {
             ) : (
               <div key={i} className="panel p-4">
                 <p className="whitespace-pre-wrap text-sm leading-relaxed text-ink-muted">{m.content || <span className="text-ink-subtle">Thinking…</span>}</p>
-                {m.cards && m.cards.length > 0 && (
+                {m.cards?.includes("stack") && (
+                  <div className="mt-4">
+                    <TechStack />
+                  </div>
+                )}
+                {m.cards && m.cards.some((c) => c !== "stack") && (
                   <div className="mt-3 grid gap-2 sm:grid-cols-3">
-                    {m.cards.map((id) => (
-                      <Card key={id} id={id} />
-                    ))}
+                    {m.cards
+                      .filter((c) => c !== "stack")
+                      .map((id) => (
+                        <Card key={id} id={id} />
+                      ))}
                   </div>
                 )}
               </div>
