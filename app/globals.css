@@ -166,3 +166,12 @@
     @apply h-11 w-full rounded-md border border-hairline bg-surface-1 px-3 text-base text-ink placeholder:text-ink-tertiary transition-colors focus:border-hairline-strong;
   }
 }
+
+@layer utilities {
+  .scrollbar-hide {
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}

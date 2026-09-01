@@ -7,6 +7,9 @@ import ExperienceList from "@/components/ExperienceList";
 import ContactForm from "@/components/ContactForm";
 import CopyEmail from "@/components/CopyEmail";
 import Footer from "@/components/Footer";
+import LiveDemos from "@/components/LiveDemos";
+import ChatWidget from "@/components/ChatWidget";
+import Reveal from "@/components/Reveal";
 import { personalInfo, projects } from "@/constants/data";
 
 export default function Home() {
@@ -15,6 +18,21 @@ export default function Home() {
       <Navbar />
       <main id="main">
         <Hero />
+
+        <section id="demos" className="scroll-mt-14 border-t border-hairline py-20 md:py-24">
+          <div className="mx-auto max-w-site px-6 lg:px-8">
+            <Reveal className="mb-10 md:flex md:items-end md:justify-between md:gap-12">
+              <div>
+                <p className="eyebrow">Interactive demos</p>
+                <h2 className="display-md mt-3 text-balance">Try the mechanisms</h2>
+              </div>
+              <p className="mt-4 max-w-[48ch] text-base leading-relaxed text-ink-subtle md:mt-0">
+                Client products stay private, so these are rebuilt from scratch with fake data. The logic — locking, orchestration, retrieval, retries — is the real shape.
+              </p>
+            </Reveal>
+            <LiveDemos />
+          </div>
+        </section>
 
         <Section
           id="projects"
@@ -54,6 +72,7 @@ export default function Home() {
         </Section>
       </main>
       <Footer />
+      <ChatWidget />
     </>
   );
 }
