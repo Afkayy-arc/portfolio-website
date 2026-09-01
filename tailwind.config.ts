@@ -1,39 +1,31 @@
 import type { Config } from "tailwindcss";
 
+// Every colour resolves to a CSS variable declared in app/globals.css:
+// light = DESIGN.md (Vercel), dark = DESIGN.dark.md (Linear). Components never branch on theme.
+const v = (name: string) => `rgb(var(--${name}) / <alpha-value>)`;
+
 const config: Config = {
   darkMode: "class",
-  content: [
-    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
+  content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
   theme: {
     extend: {
       colors: {
-        background: "#09090b",
-        foreground: "#fafafa",
+        canvas: v("canvas"),
+        surface: { 1: v("surface-1"), 2: v("surface-2"), 3: v("surface-3"), 4: v("surface-4") },
+        hairline: { DEFAULT: v("hairline"), strong: v("hairline-strong"), tertiary: v("hairline-tertiary") },
+        ink: { DEFAULT: v("ink"), muted: v("ink-muted"), subtle: v("ink-subtle"), tertiary: v("ink-tertiary") },
+        primary: { DEFAULT: v("primary"), hover: v("primary-hover"), focus: v("primary-focus") },
+        accent: v("accent"),
+        success: v("success"),
       },
-      animation: {
-        "fade-in": "fadeIn 0.6s ease-in-out",
-        "slide-up": "slideUp 0.5s ease-out",
-        "tilt": "tilt 0.3s ease-in-out",
+      fontFamily: {
+        sans: ["var(--font-geist-sans)", "SF Pro Display", "-apple-system", "system-ui", "sans-serif"],
+        mono: ["var(--font-geist-mono)", "ui-monospace", "SFMono-Regular", "Menlo", "monospace"],
       },
-      keyframes: {
-        fadeIn: {
-          "0%": { opacity: "0" },
-          "100%": { opacity: "1" },
-        },
-        slideUp: {
-          "0%": { transform: "translateY(20px)", opacity: "0" },
-          "100%": { transform: "translateY(0)", opacity: "1" },
-        },
-        tilt: {
-          "0%, 100%": { transform: "rotate(0deg)" },
-          "50%": { transform: "rotate(1deg)" },
-        },
-      },
+      maxWidth: { site: "1280px" },
     },
   },
   plugins: [],
 };
+
 export default config;

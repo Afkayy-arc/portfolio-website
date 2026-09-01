@@ -1,169 +1,74 @@
-"use client";
+import { personalInfo, metrics } from "@/constants/data";
+import Reveal from "./Reveal";
+import { Download } from "./icons";
 
-import { motion } from "framer-motion";
-import { ArrowDown, Github, Linkedin, Mail, Briefcase } from "lucide-react";
-import { personalInfo } from "@/constants/data";
+const facts: [string, string][] = [
+  ["Role", personalInfo.title],
+  ["Now", "Twodotzero · Barcelona (remote)"],
+  ["Base", `${personalInfo.location} · ${personalInfo.timezone}`],
+  ["Stack", "Next.js · Node · Flutter · n8n · Airflow"],
+  ["Email", personalInfo.email],
+];
 
 export default function Hero() {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.3,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.6, ease: "easeOut" },
-    },
-  };
-
   return (
-    <section className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-16">
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        className="max-w-5xl mx-auto text-center"
-      >
-        {/* Availability Badge */}
-        <motion.div variants={itemVariants} className="mb-8">
-          <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-indigo-500/10 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/30 dark:border-indigo-500/20">
-            <span className="w-2 h-2 bg-indigo-500 rounded-full mr-2 animate-pulse"></span>
+    <div id="top" className="mx-auto max-w-site px-6 pb-16 pt-20 md:pb-20 md:pt-28 lg:px-8">
+      <div className="grid gap-12 md:grid-cols-12 md:items-end">
+        <Reveal className="md:col-span-7">
+          <p className="badge">
+            <span aria-hidden className="size-1.5 rounded-full bg-success" />
             {personalInfo.availability}
-          </span>
-        </motion.div>
+          </p>
+          <h1 className="display-lg mt-6 max-w-[16ch] text-balance">
+            {personalInfo.name} builds ticketing platforms, workflow automations, and the APIs underneath them.
+          </h1>
+          <p className="mt-6 max-w-[58ch] text-lg leading-relaxed text-ink-subtle">
+            Three years across MERN, Next.js, Flutter and n8n. Currently at Twodotzero in Barcelona, remote from Islamabad;
+            previously AI engineering at DevMechanix.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <a href="#contact" className="btn-primary">
+              Get in touch
+            </a>
+            <a href={personalInfo.cvPath} download="Muhammad_Abdullah_CV.pdf" className="btn-secondary">
+              <Download />
+              Download CV
+            </a>
+          </div>
+        </Reveal>
 
-        {/* Main Heading */}
-        <motion.h1
-          variants={itemVariants}
-          className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-zinc-900 dark:text-zinc-100 mb-6 leading-tight"
-        >
-          Hi, I&apos;m{" "}
-          <span className="bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-500 bg-clip-text text-transparent">
-            {personalInfo.name.split(" ")[0]}
-          </span>
-        </motion.h1>
+        {/* Linear-style issue card standing in for a product screenshot */}
+        <Reveal delay={0.1} className="md:col-span-5">
+          <div className="panel p-5 font-mono text-[13px] leading-relaxed">
+            <div className="flex items-center justify-between border-b border-hairline pb-3">
+              <span className="text-ink-tertiary">MA-2026</span>
+              <span className="badge">
+                <span aria-hidden className="size-1.5 rounded-full bg-primary" />
+                In progress
+              </span>
+            </div>
+            <dl className="mt-4 grid grid-cols-[72px_1fr] gap-y-2.5">
+              {facts.map(([k, v]) => (
+                <div key={k} className="contents">
+                  <dt className="text-ink-tertiary">{k}</dt>
+                  <dd className="break-words text-ink-muted">{v}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        </Reveal>
+      </div>
 
-        <motion.h2
-          variants={itemVariants}
-          className="text-2xl sm:text-3xl md:text-4xl font-semibold text-zinc-600 dark:text-zinc-400 mb-6"
-        >
-          {personalInfo.title}
-        </motion.h2>
-
-        {/* Tagline */}
-        <motion.p
-          variants={itemVariants}
-          className="text-lg sm:text-xl text-zinc-600 dark:text-zinc-400 mb-8 max-w-3xl mx-auto leading-relaxed"
-        >
-          {personalInfo.tagline}
-        </motion.p>
-
-        {/* Bio */}
-        <motion.p
-          variants={itemVariants}
-          className="text-base sm:text-lg text-zinc-500 dark:text-zinc-500 mb-12 max-w-2xl mx-auto"
-        >
-          {personalInfo.bio}
-        </motion.p>
-
-        {/* Social Links */}
-        <motion.div
-          variants={itemVariants}
-          className="flex items-center justify-center gap-4 mb-16"
-        >
-          <a
-            href={personalInfo.social.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="p-3 bg-zinc-100 dark:bg-zinc-800/50 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100 rounded-lg border border-zinc-300 dark:border-zinc-700 hover:border-indigo-500 dark:hover:border-indigo-500/50 transition-all duration-300 hover:scale-110"
-            aria-label="GitHub"
-          >
-            <Github size={24} />
-          </a>
-          <a
-            href={personalInfo.social.linkedin}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="p-3 bg-zinc-100 dark:bg-zinc-800/50 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100 rounded-lg border border-zinc-300 dark:border-zinc-700 hover:border-indigo-500 dark:hover:border-indigo-500/50 transition-all duration-300 hover:scale-110"
-            aria-label="LinkedIn"
-          >
-            <Linkedin size={24} />
-          </a>
-          <a
-            href={personalInfo.social.upwork}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="p-3 bg-zinc-100 dark:bg-zinc-800/50 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100 rounded-lg border border-zinc-300 dark:border-zinc-700 hover:border-indigo-500 dark:hover:border-indigo-500/50 transition-all duration-300 hover:scale-110"
-            aria-label="Upwork"
-          >
-            <Briefcase size={24} />
-          </a>
-          <a
-            href={`mailto:${personalInfo.email}`}
-            className="p-3 bg-zinc-100 dark:bg-zinc-800/50 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100 rounded-lg border border-zinc-300 dark:border-zinc-700 hover:border-indigo-500 dark:hover:border-indigo-500/50 transition-all duration-300 hover:scale-110"
-            aria-label="Email"
-          >
-            <Mail size={24} />
-          </a>
-        </motion.div>
-
-        {/* CTA Buttons */}
-        <motion.div
-          variants={itemVariants}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16"
-        >
-          <a
-            href="#projects"
-            onClick={(e) => {
-              e.preventDefault();
-              document.querySelector("#projects")?.scrollIntoView({ behavior: "smooth" });
-            }}
-            className="px-8 py-4 bg-indigo-600 hover:bg-indigo-500 text-white font-medium rounded-lg transition-all duration-300 hover:scale-105 shadow-lg shadow-indigo-500/25"
-          >
-            View My Work
-          </a>
-          <a
-            href="/CV/Full_Stack_CV.pdf"
-            download="Muhammad_Abdullah_CV.pdf"
-            className="px-8 py-4 bg-emerald-600 hover:bg-emerald-500 text-white font-medium rounded-lg transition-all duration-300 hover:scale-105 shadow-lg shadow-emerald-500/25"
-          >
-            Download CV
-          </a>
-          <a
-            href="#contact"
-            onClick={(e) => {
-              e.preventDefault();
-              document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" });
-            }}
-            className="px-8 py-4 bg-zinc-100 dark:bg-zinc-800/50 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-900 dark:text-zinc-100 font-medium rounded-lg border border-zinc-300 dark:border-zinc-700 hover:border-indigo-500 dark:hover:border-indigo-500/50 transition-all duration-300"
-          >
-            Get In Touch
-          </a>
-        </motion.div>
-
-        {/* Scroll Indicator */}
-        <motion.div
-          variants={itemVariants}
-          className="flex justify-center"
-        >
-          <motion.div
-            animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-            className="text-zinc-400 dark:text-zinc-500"
-          >
-            <ArrowDown size={32} />
-          </motion.div>
-        </motion.div>
-      </motion.div>
-    </section>
+      <Reveal delay={0.15} className="mt-16 md:mt-24">
+        <ul className="grid grid-cols-2 divide-hairline border-t border-hairline md:grid-cols-4 md:divide-x">
+          {metrics.map((m) => (
+            <li key={m.label} className="py-6 pr-6 md:px-6 md:first:pl-0">
+              <p className="text-2xl font-semibold tabular-nums tracking-tight">{m.value}</p>
+              <p className="mt-1 text-sm text-ink-subtle">{m.label}</p>
+            </li>
+          ))}
+        </ul>
+      </Reveal>
+    </div>
   );
 }

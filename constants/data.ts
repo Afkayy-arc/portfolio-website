@@ -1,219 +1,176 @@
-import {
-  Code2,
-  Database,
-  Layers,
-  Smartphone,
-  Globe,
-  GitBranch,
-  Terminal,
-  Palette,
-  Cloud,
-  Workflow,
-  Zap,
-  Server,
-  type LucideIcon
-} from "lucide-react";
+// Single source of truth for everything rendered on the public site.
 
 export interface Project {
-  id: number;
   title: string;
-  description: string;
+  summary: string;
   tags: string[];
-  image: string;
-  liveUrl: string;
-  githubUrl: string;
-  featured: boolean;
-}
-
-export interface Skill {
-  name: string;
-  icon: LucideIcon;
-  category: string;
+  liveUrl?: string;
+  repoUrl?: string;
+  featured?: boolean;
 }
 
 export interface Experience {
-  id: number;
-  title: string;
+  role: string;
   company: string;
+  location: string;
   period: string;
-  description: string[];
-  technologies: string[];
+  bullets: string[];
+  tech: string[];
 }
 
 export const personalInfo = {
   name: "Muhammad Abdullah",
-  title: "Full Stack Software Engineer",
-  tagline: "Building scalable web and mobile applications with modern technologies",
+  title: "Full-stack software engineer",
+  summary:
+    "Full-stack software engineer with three years across MERN, Next.js, Flutter and n8n. Ticketing platforms, workflow automation, and the APIs underneath them.",
   email: "m.abdullah.work.1385@gmail.com",
   location: "Islamabad, Pakistan",
-  phone: "0329-8232629",
-  availability: "Available for freelance & full-time opportunities",
-  bio: "Full Stack Software Engineer with 3+ years of experience building scalable web and mobile applications using MERN, Next.js, and Flutter. Proven track record of architecting end-to-end solutions with real-time databases (Firestore, MongoDB), optimizing API performance by 45%, and delivering user-centric platforms handling 500+ concurrent users. Expert in backend system design, frontend interactivity, and workflow automation.",
+  timezone: "UTC+5",
+  availability: "Available for freelance and full-time work",
+  cvPath: "/CV/Full_Stack_CV.pdf",
   social: {
-    github: "https://github.com/Afkayyy",
+    github: "https://github.com/Afkayy-arc",
     linkedin: "https://linkedin.com/in/afkayyy",
     upwork: "https://www.upwork.com/freelancers/~01fbe990a14ce10108",
-    portfolio: "https://github.com/Afkayyy"
-  }
+  },
 };
+
+export const metrics = [
+  { value: "3+", label: "years shipping full-stack" },
+  { value: "1,000+", label: "seats rendered live per venue" },
+  { value: "500+", label: "concurrent buyers at peak sale" },
+  { value: "45%", label: "API latency cut on a video platform" },
+];
 
 export const projects: Project[] = [
   {
-    id: 1,
-    title: "Tickly - Seatmap & Event Management Platform",
-    description: "Built comprehensive event ticketing platform from scratch with interactive drag-and-drop seat designer. Engineered real-time canvas rendering optimized for large venues (1000+ seats), integrated payment gateway, and admin dashboard with analytics. Implemented RESTful API backend handling concurrent bookings with mutex locking, reducing double-booking incidents to zero.",
+    title: "Tickly",
+    summary:
+      "Event ticketing with a drag-and-drop seat designer. Canvas rendering stays smooth past 1,000 seats, and bookings go through a REST API with mutex locking, so double-bookings dropped to zero.",
     tags: ["React", "PHP", "Fabric.js", "MySQL", "Stripe"],
-    image: "/images/Tickly Seatmap.png",
     liveUrl: "https://tickly-project.devmechanix.com",
-    githubUrl: "https://github.com/Afkayyy",
-    featured: true
+    featured: true,
   },
   {
-    id: 2,
-    title: "Houdini Tickets - Interactive Ticketing Platform",
-    description: "Developed real-time seatmap interface with canvas-based interactivity, supporting high concurrency with API caching and CDN optimization. Integrated Stripe payment processing and responsive UI handling 500+ simultaneous users during peak event sales.",
-    tags: ["Canvas API", "React", "Caching", "Stripe", "CDN"],
-    image: "/images/Houdini Tickets.png",
+    title: "Houdini Tickets",
+    summary:
+      "Real-time seat-map storefront with Stripe checkout. API caching and a CDN kept it responsive through 500+ simultaneous buyers during peak on-sales.",
+    tags: ["Canvas API", "React", "Stripe", "CDN caching"],
     liveUrl: "https://houdinitickets.com",
-    githubUrl: "https://github.com/Afkayyy",
-    featured: true
+    featured: true,
   },
   {
-    id: 3,
-    title: "Dental Clinic Automation System",
-    description: "Built end-to-end dental appointment automation using n8n workflows, integrating AI chatbot for client interaction, voice recording, and payment processing. Implemented Text-to-Speech (TTS) appointment reminders, CRM business logs, and automated follow-up sequences, reducing no-shows by 40%. Connected Google Calendar, Stripe payments, and WhatsApp notifications in unified workflow handling 200+ monthly appointments.",
-    tags: ["n8n", "AI Chatbot", "TTS", "CRM", "Stripe", "WhatsApp"],
-    image: "/images/Dental Clinic n8n Automation.png",
-    liveUrl: "https://devmechanix.com",
-    githubUrl: "https://github.com/Afkayyy",
-    featured: true
+    title: "TapReview",
+    summary:
+      "QR-to-Google-review flow for restaurants and clinics. Scan, rate on a half-star slider, pick a generated review in English or Urdu, copy, and land on Google's write-review page. Static site, embeddable widget, Sheets-backed analytics.",
+    tags: ["Vanilla JS", "Google Apps Script", "Embeddable widget"],
+    liveUrl: "https://afkayy-arc.github.io/tapreview/",
+    repoUrl: "https://github.com/Afkayy-arc/tapreview",
+    featured: true,
   },
   {
-    id: 4,
-    title: "CRM Business Interaction System",
-    description: "Architected automated CRM logging system capturing client interactions across multiple channels (email, chat, phone) using n8n webhooks. Built custom dashboards aggregating interaction data with real-time sync to PostgreSQL database, enabling sales team productivity tracking.",
-    tags: ["n8n", "Webhooks", "PostgreSQL", "Dashboard"],
-    image: "/images/CRM Buisness Interaction.png",
-    liveUrl: "https://github.com/Afkayyy",
-    githubUrl: "https://github.com/Afkayyy",
-    featured: false
+    title: "Dental clinic automation",
+    summary:
+      "n8n workflows that book, remind and follow up: LLM chat intake, text-to-speech phone reminders, Stripe payments, WhatsApp notifications and Google Calendar sync. 200+ appointments a month, 40% fewer no-shows.",
+    tags: ["n8n", "LLM", "TTS", "Stripe", "WhatsApp API"],
   },
   {
-    id: 5,
-    title: "MERN Blog App",
-    description: "Developed full-featured blogging platform with JWT authentication, role-based access control (admin/user), and rich text editor integration. Implemented Redis caching layer reducing database queries by 60%, responsive UI, and admin analytics dashboard tracking user engagement.",
-    tags: ["MongoDB", "Express", "React", "Node.js", "Redis", "JWT"],
-    image: "/images/Mern-Blog APP.png",
-    liveUrl: "https://github.com/Afkayyy",
-    githubUrl: "https://github.com/Afkayyy",
-    featured: false
+    title: "CRM interaction logger",
+    summary:
+      "n8n webhooks capture email, chat and call events into PostgreSQL; dashboards give the sales team a per-rep activity view synced in real time.",
+    tags: ["n8n", "Webhooks", "PostgreSQL"],
   },
   {
-    id: 6,
-    title: "Purrfect Assistant - AI Pet Health App",
-    description: "Built cross-platform mobile app using Flutter with comprehensive Firebase integration (Authentication, Firestore, Cloud Messaging, Storage). Implemented AI breed detection, health tracking system, GPS-based vet locator, and push notification reminders for vaccinations.",
-    tags: ["Flutter", "Firebase", "AI", "GPS", "Cloud Messaging"],
-    image: "/images/Purrfect Assistant.png",
-    liveUrl: "https://github.com/Afkayyy",
-    githubUrl: "https://github.com/Afkayyy",
-    featured: false
+    title: "MERN blog platform",
+    summary:
+      "Blogging platform with JWT auth, admin and user roles, a rich-text editor, and a Redis cache layer that cut database reads by 60%.",
+    tags: ["MongoDB", "Express", "React", "Node.js", "Redis"],
+    repoUrl: "https://github.com/Afkayy-arc/Mern-Blog-",
   },
   {
-    id: 7,
-    title: "RAG Semantic Search System",
-    description: "Engineered RAG-based (Retrieval-Augmented Generation) semantic search system for enhanced knowledge retrieval and contextual responses. Implemented vector embeddings with efficient similarity search, optimizing query performance for large document collections. Built intelligent search interface enabling natural language queries with context-aware results.",
-    tags: ["RAG", "LangChain", "Vector DB", "NLP", "Python", "AI"],
-    image: "/images/Rag Search Bar.png",
-    liveUrl: "https://devmechanix.com",
-    githubUrl: "https://github.com/Afkayyy",
-    featured: false
+    title: "Purrfect Assistant",
+    summary:
+      "Flutter app for pet owners: Firebase auth and Firestore, on-device breed detection, a health log, GPS vet finder and vaccination push reminders.",
+    tags: ["Flutter", "Firebase", "ML", "Maps"],
   },
   {
-    id: 8,
-    title: "Transaction Reclassification ETL Pipeline",
-    description: "Built enterprise-grade ETL (Extract, Transform, Load) pipeline using Apache Airflow for automated transaction reclassification. Implemented data validation, transformation logic handling 100K+ daily transactions, and orchestrated multi-stage workflows with error handling and retry mechanisms. Integrated with PostgreSQL and real-time monitoring dashboards.",
-    tags: ["Apache Airflow", "Python", "ETL", "PostgreSQL", "Data Engineering"],
-    image: "/images/Transaction Reclassification ETL Pipeline.png",
-    liveUrl: "https://github.com/Afkayyy",
-    githubUrl: "https://github.com/Afkayyy",
-    featured: false
-  }
+    title: "RAG semantic search",
+    summary:
+      "Retrieval-augmented search over client document sets. Vector embeddings with similarity search, natural-language queries and context-aware answers.",
+    tags: ["Python", "LangChain", "Vector DB"],
+  },
+  {
+    title: "Transaction reclassification ETL",
+    summary:
+      "Airflow pipeline that validates, transforms and reclassifies 100K+ daily transactions into PostgreSQL, with retries and monitoring on every stage.",
+    tags: ["Apache Airflow", "Python", "PostgreSQL"],
+  },
 ];
 
-export const skills: Skill[] = [
-  { name: "React & Next.js", icon: Code2, category: "Frontend" },
-  { name: "Flutter & React Native", icon: Smartphone, category: "Mobile" },
-  { name: "Node.js & Express", icon: Layers, category: "Backend" },
-  { name: "TypeScript & JavaScript", icon: Terminal, category: "Language" },
-  { name: "MongoDB & PostgreSQL", icon: Database, category: "Database" },
-  { name: "Firebase & Firestore", icon: Cloud, category: "Database" },
-  { name: "REST & GraphQL APIs", icon: Globe, category: "API" },
-  { name: "n8n Automation", icon: Workflow, category: "Automation" },
-  { name: "Apache Airflow", icon: Zap, category: "Automation" },
-  { name: "Docker & Linux", icon: Server, category: "DevOps" },
-  { name: "AWS & CI/CD", icon: Cloud, category: "DevOps" },
-  { name: "Git & GitHub", icon: GitBranch, category: "Tools" },
+export const stack = [
+  { group: "Frontend", items: ["React", "Next.js", "TypeScript", "Tailwind CSS", "Framer Motion"] },
+  { group: "Mobile", items: ["Flutter", "React Native", "Firebase"] },
+  { group: "Backend", items: ["Node.js", "Express", "PHP", "REST", "GraphQL", "WebSockets"] },
+  { group: "Data", items: ["PostgreSQL", "MySQL", "MongoDB", "Firestore", "Redis"] },
+  { group: "Automation & AI", items: ["n8n", "Apache Airflow", "LangChain", "RAG", "OpenAI API"] },
+  { group: "Infra", items: ["AWS", "Docker", "Linux", "CI/CD", "Vercel", "Git"] },
 ];
 
 export const experience: Experience[] = [
   {
-    id: 1,
-    title: "Software Developer (Remote)",
-    company: "Twodotzero Innovation Agency - Barcelona, Spain",
-    period: "Nov 2025 - Present",
-    description: [
-      "Architected end-to-end backend admin systems and data interaction layers using Firestore DB, enabling real-time scalability for SME client platforms",
-      "Built comprehensive event ticketing platforms with real-time seat management for 1000+ seats",
-      "Implemented RESTful API backend with mutex locking for concurrent bookings, reducing double-booking incidents to zero",
-      "Developed responsive admin dashboards with analytics and payment gateway integration"
+    role: "Software Developer",
+    company: "Twodotzero Innovation Agency",
+    location: "Barcelona · remote",
+    period: "Nov 2025 — present",
+    bullets: [
+      "Own backend admin systems and data layers on Firestore for SME client platforms.",
+      "Built event ticketing with live seat management for venues of 1,000+ seats.",
+      "REST backend with mutex locking on concurrent bookings; double-bookings went to zero.",
+      "Admin dashboards with analytics and payment-gateway integration.",
     ],
-    technologies: ["Firestore", "React", "PHP", "Fabric.js", "MySQL", "REST APIs"]
+    tech: ["Firestore", "React", "PHP", "Fabric.js", "MySQL"],
   },
   {
-    id: 2,
-    title: "AI Engineer",
-    company: "DevMechanix - Islamabad, Pakistan",
-    period: "Feb 2025 - Oct 2025",
-    description: [
-      "Automated marketing and support workflows using n8n integration, reducing manual operations by 35%",
-      "Built RAG-based semantic search systems for enhanced client interaction",
-      "Developed end-to-end dental clinic automation with AI chatbot, TTS reminders, and CRM integration, reducing no-shows by 40%",
-      "Architected automated CRM logging system capturing client interactions across multiple channels using n8n webhooks"
+    role: "AI Engineer",
+    company: "DevMechanix",
+    location: "Islamabad",
+    period: "Feb 2025 — Oct 2025",
+    bullets: [
+      "Automated marketing and support workflows in n8n, cutting manual operations by 35%.",
+      "RAG-based semantic search for client knowledge bases.",
+      "End-to-end dental clinic automation: LLM chatbot, TTS reminders, CRM; no-shows down 40%.",
+      "Multi-channel CRM logging via n8n webhooks into PostgreSQL.",
     ],
-    technologies: ["n8n", "AI", "Webhooks", "PostgreSQL", "CRM", "TTS"]
+    tech: ["n8n", "LLM", "Webhooks", "PostgreSQL", "TTS"],
   },
   {
-    id: 3,
-    title: "Full Stack Engineer Intern",
-    company: "IT Solera Pvt Ltd - Remote",
-    period: "Jul 2023 - Sep 2023",
-    description: [
-      "Deployed ML-powered video platform with MERN stack backend integration",
-      "Cut API latency by 45% through optimized GPU utilization",
-      "Developed real-time features with WebSocket integration",
-      "Implemented responsive UI with React and Redux state management"
+    role: "Full-stack Engineer Intern",
+    company: "IT Solera",
+    location: "Remote",
+    period: "Jul 2023 — Sep 2023",
+    bullets: [
+      "Deployed an ML-powered video platform on a MERN backend.",
+      "Cut API latency 45% by fixing GPU utilisation.",
+      "Real-time features over WebSockets; React and Redux on the front end.",
     ],
-    technologies: ["MongoDB", "Express", "React", "Node.js", "ML", "WebSocket"]
+    tech: ["MongoDB", "Express", "React", "Node.js", "WebSockets"],
   },
   {
-    id: 4,
-    title: "Backend Database Developer Intern",
-    company: "ROBX.AI - Remote",
-    period: "Apr 2022 - Sep 2022",
-    description: [
-      "Optimized SQL queries and REST APIs for analytics platform",
-      "Achieved 35% faster data access for 500+ active users",
-      "Built efficient database schemas and indexing strategies",
-      "Implemented API endpoints with proper error handling and validation"
+    role: "Backend Database Developer Intern",
+    company: "ROBX.AI",
+    location: "Remote",
+    period: "Apr 2022 — Sep 2022",
+    bullets: [
+      "Optimised SQL queries and REST endpoints for an analytics platform.",
+      "35% faster data access for 500+ active users through schema and index work.",
     ],
-    technologies: ["SQL", "REST APIs", "Database Optimization", "Node.js"]
-  }
+    tech: ["SQL", "REST", "Node.js"],
+  },
 ];
 
 export const navLinks = [
-  { name: "Home", href: "#home" },
   { name: "Projects", href: "#projects" },
-  { name: "Skills", href: "#skills" },
+  { name: "Stack", href: "#stack" },
   { name: "Experience", href: "#experience" },
-  { name: "Contact", href: "#contact" }
+  { name: "Contact", href: "#contact" },
 ];

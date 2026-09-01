@@ -1,64 +1,50 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-import { ThemeProvider } from "@/components/ThemeProvider";
+import type { Metadata, Viewport } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
+import { ThemeProvider } from "next-themes";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { personalInfo } from "@/constants/data";
+import { siteUrl } from "@/lib/site";
+import "./globals.css";
 
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-});
+const sans = Geist({ subsets: ["latin"], variable: "--font-geist-sans" });
+const mono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono" });
+
+const title = `${personalInfo.name} — ${personalInfo.title}`;
 
 export const metadata: Metadata = {
-  title: "Muhammad Abdullah - Full Stack Software Engineer",
-  description: "Portfolio of Muhammad Abdullah - Full Stack Software Engineer with 3+ years of experience building scalable web and mobile applications using MERN, Next.js, and Flutter. Expert in backend system design, frontend interactivity, and workflow automation.",
-  keywords: ["developer", "full-stack", "react", "next.js", "typescript", "flutter", "mern", "n8n", "automation", "portfolio", "muhammad abdullah"],
-  authors: [{ name: "Muhammad Abdullah" }],
-  icons: {
-    icon: [
-      { url: "/icon.svg", type: "image/svg+xml" },
-    ],
-    apple: [
-      { url: "/apple-icon.svg", type: "image/svg+xml" },
-    ],
-  },
-  openGraph: {
-    title: "Muhammad Abdullah - Full Stack Software Engineer",
-    description: "Portfolio showcasing scalable web and mobile applications with expertise in MERN, Next.js, Flutter, and workflow automation",
-    type: "website",
-  },
+  metadataBase: new URL(siteUrl),
+  title: { default: title, template: `%s — ${personalInfo.name}` },
+  description: personalInfo.summary,
+  keywords: ["full-stack engineer", "next.js", "node.js", "flutter", "n8n", "airflow", "islamabad", personalInfo.name.toLowerCase()],
+  authors: [{ name: personalInfo.name }],
+  openGraph: { title, description: personalInfo.summary, type: "website", url: siteUrl, siteName: personalInfo.name },
+  twitter: { card: "summary_large_image", title, description: personalInfo.summary },
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  return (
-    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
-      <body
-        className={`${inter.variable} font-sans antialiased`}
-      >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {/* Radial Gradient Background */}
-          <div className="fixed inset-0 -z-10 bg-white dark:bg-[#09090b] transition-colors duration-300">
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-200/30 via-white to-white dark:from-indigo-900/20 dark:via-zinc-900/20 dark:to-zinc-950"></div>
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,_var(--tw-gradient-stops))] from-purple-200/20 via-transparent to-transparent dark:from-purple-900/10 dark:via-transparent dark:to-transparent"></div>
-          </div>
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#010102" },
+  ],
+};
 
-          {/* Main Content */}
-          <main className="relative">
-            {children}
-          </main>
-          <Analytics />
-          <SpeedInsights />
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  return (
+    // suppressHydrationWarning: next-themes sets the class on <html> before hydration.
+    <html lang="en" className={`${sans.variable} ${mono.variable}`} suppressHydrationWarning>
+      <body className="font-sans">
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          <a
+            href="#main"
+            className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-surface-2 focus:px-3 focus:py-2 focus:text-sm"
+          >
+            Skip to content
+          </a>
+          {children}
         </ThemeProvider>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

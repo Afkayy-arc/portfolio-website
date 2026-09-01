@@ -1,120 +1,79 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
-import { navLinks } from "@/constants/data";
-import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useState } from "react";
+import { navLinks, personalInfo } from "@/constants/data";
 import ThemeToggle from "./ThemeToggle";
+import { Close, Menu } from "./icons";
 
 export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [active, setActive] = useState("");
 
+  // Track which section is in view so the current nav item reads as current.
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    const sections = navLinks
+      .map((l) => document.querySelector<HTMLElement>(l.href))
+      .filter((el): el is HTMLElement => el !== null);
+    const io = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter((e) => e.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (visible) setActive(`#${visible.target.id}`);
+      },
+      { rootMargin: "-40% 0px -55% 0px" }
+    );
+    sections.forEach((s) => io.observe(s));
+    return () => io.disconnect();
   }, []);
 
-  const handleNavClick = (href: string) => {
-    setIsOpen(false);
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
-  };
+  const linkClass = (href: string) =>
+    `rounded-md px-3 py-2 text-sm transition-colors hover:text-ink ${active === href ? "text-ink" : "text-ink-subtle"}`;
 
   return (
-    <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "bg-white/80 dark:bg-zinc-900/80 backdrop-blur-lg border-b border-zinc-200 dark:border-zinc-800"
-          : "bg-transparent"
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <motion.a
-            href="#home"
-            className="text-2xl font-bold text-zinc-900 dark:text-zinc-100 hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors"
-            onClick={(e) => {
-              e.preventDefault();
-              handleNavClick("#home");
-            }}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
+    <nav className="sticky top-0 z-40 border-b border-hairline bg-canvas/80 backdrop-blur-md">
+      <div className="mx-auto flex h-14 max-w-site items-center justify-between px-6 lg:px-8">
+        <a href="#top" className="flex items-center gap-2.5 text-sm font-medium text-ink">
+          <span aria-hidden className="size-2.5 rounded-[3px] bg-primary" />
+          {personalInfo.name}
+        </a>
+
+        <div className="hidden items-center gap-1 md:flex">
+          {navLinks.map((l) => (
+            <a key={l.href} href={l.href} className={linkClass(l.href)} aria-current={active === l.href ? "location" : undefined}>
+              {l.name}
+            </a>
+          ))}
+          <ThemeToggle className="ml-3" />
+          <a href={`mailto:${personalInfo.email}`} className="btn-secondary ml-2 h-9">
+            Email
+          </a>
+        </div>
+
+        <div className="flex items-center gap-2 md:hidden">
+          <ThemeToggle />
+          <button
+            type="button"
+            onClick={() => setOpen((o) => !o)}
+            className="-mr-2 flex size-10 items-center justify-center rounded-md text-ink-muted hover:text-ink"
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
           >
-            {"<MA />"}
-          </motion.a>
-
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-2">
-            {navLinks.map((link, index) => (
-              <motion.a
-                key={link.name}
-                href={link.href}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleNavClick(link.href);
-                }}
-                className="px-4 py-2 text-zinc-700 dark:text-zinc-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800/50"
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-              >
-                {link.name}
-              </motion.a>
-            ))}
-            <ThemeToggle />
-          </div>
-
-          {/* Mobile: Theme Toggle & Menu Button */}
-          <div className="md:hidden flex items-center gap-2">
-            <ThemeToggle />
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="p-2 text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
-              aria-label="Toggle menu"
-            >
-              {isOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-          </div>
+            {open ? <Close width={20} height={20} /> : <Menu width={20} height={20} />}
+          </button>
         </div>
       </div>
 
-      {/* Mobile Navigation */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
-            className="md:hidden bg-white/95 dark:bg-zinc-900/95 backdrop-blur-lg border-b border-zinc-200 dark:border-zinc-800"
-          >
-            <div className="px-4 py-6 space-y-3">
-              {navLinks.map((link) => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleNavClick(link.href);
-                  }}
-                  className="block px-4 py-3 text-zinc-700 dark:text-zinc-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-zinc-100 dark:hover:bg-zinc-800/50 rounded-lg transition-all"
-                >
-                  {link.name}
-                </a>
-              ))}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {open && (
+        <div className="border-t border-hairline bg-canvas px-6 py-3 md:hidden">
+          {navLinks.map((l) => (
+            <a key={l.href} href={l.href} onClick={() => setOpen(false)} className="block rounded-md px-3 py-3 text-base text-ink-muted hover:text-ink">
+              {l.name}
+            </a>
+          ))}
+          <a href={`mailto:${personalInfo.email}`} className="btn-secondary mt-2 w-full justify-center">
+            Email
+          </a>
+        </div>
+      )}
     </nav>
   );
 }

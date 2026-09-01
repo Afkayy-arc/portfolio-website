@@ -3,81 +3,166 @@
 @tailwind utilities;
 
 @layer base {
+  /* Light — Vercel (DESIGN.md). Values are RGB channels so Tailwind alpha modifiers work. */
   :root {
-    --background: #ffffff;
-    --foreground: #09090b;
+    color-scheme: light;
+    --canvas: 255 255 255;
+    --surface-1: 250 250 250;
+    --surface-2: 245 245 245;
+    --surface-3: 240 240 240;
+    --surface-4: 235 235 235;
+    --hairline: 235 235 235;
+    --hairline-strong: 161 161 161;
+    --hairline-tertiary: 212 212 212;
+    --ink: 23 23 23;
+    --ink-muted: 77 77 77;
+    --ink-subtle: 102 102 102; /* spec says #888; lifted to #666 to pass AA for body copy */
+    --ink-tertiary: 118 118 118;
+    --primary: 23 23 23;
+    --primary-hover: 56 56 56;
+    --primary-focus: 0 0 0;
+    --accent: 0 112 243;
+    --success: 0 112 243;
+    --ring: rgb(0 112 243 / 0.5);
+    --selection-bg: #171717;
+    --selection-fg: #f2f2f2;
+    --panel-bg: 255 255 255;
+    --panel-shadow: 0 1px 1px rgb(0 0 0 / 0.02), 0 2px 2px rgb(0 0 0 / 0.04);
+    --radius-btn: 9999px;
+    --scroll-thumb: #d4d4d4;
+    --scroll-thumb-hover: #a1a1a1;
   }
 
+  /* Dark — Linear (DESIGN.dark.md) */
   .dark {
-    --background: #09090b;
-    --foreground: #fafafa;
+    color-scheme: dark;
+    --canvas: 1 1 2;
+    --surface-1: 15 16 17;
+    --surface-2: 20 21 22;
+    --surface-3: 24 25 26;
+    --surface-4: 25 26 27;
+    --hairline: 35 37 42;
+    --hairline-strong: 52 52 58;
+    --hairline-tertiary: 62 62 68;
+    --ink: 247 248 248;
+    --ink-muted: 208 214 224;
+    --ink-subtle: 138 143 152;
+    --ink-tertiary: 98 102 109;
+    --primary: 94 106 210;
+    --primary-hover: 130 143 255;
+    --primary-focus: 94 105 209;
+    --accent: 94 106 210;
+    --success: 39 166 68;
+    --ring: rgb(94 105 209 / 0.6);
+    --selection-bg: rgb(94 106 210 / 0.35);
+    --selection-fg: inherit;
+    --panel-bg: 15 16 17;
+    --panel-shadow: inset 0 1px 0 0 rgb(255 255 255 / 0.04);
+    --radius-btn: 8px;
+    --scroll-thumb: #23252a;
+    --scroll-thumb-hover: #34343a;
   }
 
-  * {
-    @apply border-zinc-300 dark:border-zinc-800;
+  html {
+    scroll-behavior: smooth;
   }
 
   body {
-    @apply bg-background text-foreground transition-colors;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    @apply bg-canvas text-ink antialiased;
+    font-feature-settings: "cv11", "ss01";
+    text-rendering: optimizeLegibility;
   }
 
-  /* Custom Scrollbar - Light Mode */
+  a,
+  button,
+  input,
+  textarea {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  ::selection {
+    background: var(--selection-bg);
+    color: var(--selection-fg);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scroll-thumb) rgb(var(--canvas));
+  }
+
   ::-webkit-scrollbar {
     width: 10px;
     height: 10px;
   }
-
   ::-webkit-scrollbar-track {
-    background: #f4f4f5;
+    background: rgb(var(--canvas));
   }
-
   ::-webkit-scrollbar-thumb {
-    background: #d4d4d8;
+    background: var(--scroll-thumb);
     border-radius: 5px;
   }
-
   ::-webkit-scrollbar-thumb:hover {
-    background: #a1a1aa;
+    background: var(--scroll-thumb-hover);
   }
 
-  /* Custom Scrollbar - Dark Mode */
-  .dark ::-webkit-scrollbar-track {
-    background: #09090b;
-  }
-
-  .dark ::-webkit-scrollbar-thumb {
-    background: #27272a;
-    border-radius: 5px;
-  }
-
-  .dark ::-webkit-scrollbar-thumb:hover {
-    background: #3f3f46;
-  }
-
-  /* Firefox */
-  * {
-    scrollbar-width: thin;
-    scrollbar-color: #d4d4d8 #f4f4f5;
-  }
-
-  .dark * {
-    scrollbar-color: #27272a #09090b;
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+@layer components {
+  .display-lg {
+    @apply text-[40px] font-semibold leading-[1.1] tracking-[-1.2px] md:text-[56px] md:tracking-[-1.8px];
+  }
+  .display-md {
+    @apply text-[32px] font-semibold leading-[1.15] tracking-[-0.8px] md:text-[40px] md:tracking-[-1px];
+  }
+  .eyebrow {
+    @apply text-[13px] font-medium leading-[1.3] tracking-[0.4px] text-ink-subtle;
   }
 
-  /* Hide scrollbar but keep scrolling functionality */
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+  /* Pill in light (Vercel), 8px in dark (Linear) — via --radius-btn */
+  .btn {
+    @apply inline-flex h-10 select-none items-center gap-2 rounded-[var(--radius-btn)] px-4 text-sm font-medium transition-colors duration-200 active:translate-y-px;
+  }
+  .btn-primary {
+    @apply btn bg-primary text-white hover:bg-primary-hover active:bg-primary-focus;
+  }
+  .btn-secondary {
+    @apply btn border border-hairline bg-surface-1 text-ink hover:border-hairline-strong hover:bg-surface-2;
   }
 
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
+  .link {
+    @apply inline-flex items-center gap-1 text-sm font-medium text-ink-muted underline-offset-4 transition-colors hover:text-ink hover:underline;
+  }
+
+  .panel {
+    @apply rounded-xl border border-hairline;
+    background: rgb(var(--panel-bg));
+    box-shadow: var(--panel-shadow);
+  }
+
+  .tag {
+    @apply inline-flex h-6 items-center rounded-sm border border-hairline bg-surface-1 px-2 font-mono text-xs text-ink-muted;
+  }
+
+  .badge {
+    @apply inline-flex h-5 items-center gap-1.5 rounded-full bg-surface-2 px-2 text-xs text-ink-muted;
+  }
+
+  .input {
+    @apply h-11 w-full rounded-md border border-hairline bg-surface-1 px-3 text-base text-ink placeholder:text-ink-tertiary transition-colors focus:border-hairline-strong;
   }
 }
