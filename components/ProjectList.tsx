@@ -2,6 +2,7 @@ import Image from "next/image";
 import { projects } from "@/constants/data";
 import Reveal from "./Reveal";
 import { ArrowUpRight } from "./icons";
+import { hueText } from "@/lib/hue";
 
 export default function ProjectList() {
   return (
@@ -9,7 +10,7 @@ export default function ProjectList() {
       {projects.map((p, i) => (
         <li key={p.title}>
           <Reveal delay={Math.min(i, 4) * 0.04} className="grid gap-3 py-7 md:grid-cols-[48px_1fr_auto] md:gap-6">
-            <span className="pt-1.5 font-mono text-xs text-ink-tertiary">{String(i + 1).padStart(2, "0")}</span>
+            <span className={`pt-1.5 font-mono text-xs ${hueText[p.hue]}`}>{String(i + 1).padStart(2, "0")}</span>
             <div>
               {p.image && (
                 <div className="relative mb-4 aspect-[16/9] overflow-hidden rounded-lg border border-hairline md:hidden">

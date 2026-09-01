@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 
 const STAGES = ["extract", "validate", "transform", "reclassify", "load"] as const;
+const STAGE_HUE = ["text-hue-cyan bg-hue-cyan", "text-hue-amber bg-hue-amber", "text-hue-violet bg-hue-violet", "text-hue-blue bg-hue-blue", "text-hue-emerald bg-hue-emerald"];
+const CAT_HUE: Record<string, string> = { Transport: "text-hue-blue", Subscriptions: "text-hue-violet", Fuel: "text-hue-amber", Shopping: "text-hue-rose", Utilities: "text-hue-cyan", Uncategorised: "text-ink-tertiary", Other: "text-ink-tertiary" };
 const RULES: [RegExp, string][] = [
   [/uber|careem/i, "Transport"],
   [/netflix|spotify/i, "Subscriptions"],
@@ -76,7 +78,7 @@ export default function EtlPipeline() {
           {Object.entries(stats).map(([k, v]) => (
             <div key={k} className="flex gap-1.5">
               <dt>{k}</dt>
-              <dd className="tabular-nums text-ink">{v}</dd>
+              <dd className={`tabular-nums ${k === "loaded" ? "text-hue-emerald" : k === "reclassified" ? "text-hue-blue" : k === "retried" ? "text-hue-amber" : "text-hue-rose"}`}>{v}</dd>
             </div>
           ))}
         </dl>
@@ -87,20 +89,24 @@ export default function EtlPipeline() {
           const here = txns.filter((t) => t.stage === i);
           return (
             <div key={s} className="min-w-[7.5rem] rounded-md border border-hairline bg-surface-1 p-2">
-              <p className="mb-2 flex items-center justify-between font-mono text-[11px] text-ink-tertiary">
+              <p className={`mb-2 flex items-center justify-between font-mono text-[11px] ${STAGE_HUE[i].split(" ")[0]}`}>
                 {s}
-                {here.length > 0 && <span className="size-1.5 rounded-full bg-primary" />}
+                <span className={`size-1.5 rounded-full ${STAGE_HUE[i].split(" ")[1]} ${here.length ? "opacity-100" : "opacity-20"}`} />
               </p>
               <ul className="min-h-[6rem] space-y-1.5">
-                {here.slice(-3).map((t) => (
-                  <li key={t.id} className={`rounded-[4px] border px-1.5 py-1 font-mono text-[10px] leading-tight ${t.retried && i === 1 ? "border-hairline-strong text-ink" : "border-hairline text-ink-subtle"}`}>
-                    <div className="truncate">{t.merchant}</div>
-                    <div className="flex justify-between tabular-nums">
-                      <span>{t.amount < 0 ? "−" : ""}Rs {Math.abs(t.amount)}</span>
-                      <span className="text-ink-tertiary">{i >= 4 ? t.category : t.raw}</span>
-                    </div>
-                  </li>
-                ))}
+                {here.slice(-3).map((t) => {
+                  const failing = i === 1 && t.amount < 0;
+                  const cat = i >= 4 ? t.category! : t.raw;
+                  return (
+                    <li key={t.id} className={`rounded-[4px] border px-1.5 py-1 font-mono text-[10px] leading-tight ${failing ? "border-hue-rose/50 bg-hue-rose/10 text-hue-rose" : t.retried && i === 1 ? "border-hue-amber/50 bg-hue-amber/10 text-ink" : "border-hairline text-ink-subtle"}`}>
+                      <div className="truncate">{t.merchant}</div>
+                      <div className="flex justify-between tabular-nums">
+                        <span>{t.amount < 0 ? "−" : ""}Rs {Math.abs(t.amount)}</span>
+                        <span className={CAT_HUE[cat] ?? "text-ink-tertiary"}>{cat}</span>
+                      </div>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           );

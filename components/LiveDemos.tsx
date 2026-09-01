@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { demos } from "@/constants/data";
 import { on } from "@/lib/bus";
 import { demoComponents } from "./demos";
+import { hueBg } from "@/lib/hue";
 
 export default function LiveDemos() {
   const [active, setActive] = useState(0);
@@ -50,8 +51,9 @@ export default function LiveDemos() {
               aria-controls={`panel-${d.id}`}
               tabIndex={active === i ? 0 : -1}
               onClick={() => go(i)}
-              className={`shrink-0 border-b px-3 py-3 text-sm transition-colors ${active === i ? "border-ink text-ink" : "border-transparent text-ink-subtle hover:text-ink"}`}
+              className={`flex shrink-0 items-center gap-2 border-b px-3 py-3 text-sm transition-colors ${active === i ? "border-ink text-ink" : "border-transparent text-ink-subtle hover:text-ink"}`}
             >
+              <span aria-hidden className={`size-1.5 rounded-sm ${hueBg[d.hue]} ${active === i ? "" : "opacity-50"}`} />
               {d.title}
             </button>
           ))}

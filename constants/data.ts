@@ -1,5 +1,8 @@
 // Single source of truth for everything rendered on the public site.
 
+// Semantic hues defined in app/globals.css (--hue-*) and tailwind (hue.*). One per project/demo for identity.
+export type Hue = "blue" | "violet" | "emerald" | "amber" | "rose" | "cyan";
+
 export interface Project {
   slug: string;
   title: string;
@@ -9,6 +12,7 @@ export interface Project {
   repoUrl?: string;
   featured?: boolean;
   image?: string; // public/projects/<slug>.png
+  hue: Hue;
 }
 
 export interface Experience {
@@ -53,6 +57,7 @@ export const metrics = [
 export const projects: Project[] = [
   {
     slug: "tickly",
+    hue: "blue",
     image: "/projects/tickly.png",
     title: "Tickly",
     summary:
@@ -63,6 +68,7 @@ export const projects: Project[] = [
   },
   {
     slug: "houdini",
+    hue: "violet",
     image: "/projects/houdini.png",
     title: "Houdini Tickets",
     summary:
@@ -73,6 +79,7 @@ export const projects: Project[] = [
   },
   {
     slug: "tapreview",
+    hue: "amber",
     image: "/projects/tapreview.png",
     title: "TapReview",
     summary:
@@ -84,6 +91,7 @@ export const projects: Project[] = [
   },
   {
     slug: "clinic",
+    hue: "emerald",
     image: "/projects/clinic.png",
     title: "Dental clinic automation",
     summary:
@@ -92,6 +100,7 @@ export const projects: Project[] = [
   },
   {
     slug: "crm",
+    hue: "cyan",
     image: "/projects/crm.png",
     title: "CRM interaction logger",
     summary:
@@ -100,6 +109,7 @@ export const projects: Project[] = [
   },
   {
     slug: "mern-blog",
+    hue: "rose",
     image: "/projects/mern-blog.png",
     title: "MERN blog platform",
     summary:
@@ -109,6 +119,7 @@ export const projects: Project[] = [
   },
   {
     slug: "purrfect",
+    hue: "violet",
     image: "/projects/purrfect.png",
     title: "Purrfect Assistant",
     summary:
@@ -117,6 +128,7 @@ export const projects: Project[] = [
   },
   {
     slug: "rag",
+    hue: "blue",
     image: "/projects/rag.png",
     title: "RAG semantic search",
     summary:
@@ -125,6 +137,7 @@ export const projects: Project[] = [
   },
   {
     slug: "etl",
+    hue: "cyan",
     image: "/projects/etl.png",
     title: "Transaction reclassification ETL",
     summary:
@@ -210,14 +223,15 @@ export interface Demo {
   blurb: string;
   tags: string[];
   projectSlugs: string[];
+  hue: Hue;
 }
 
 export const demos: Demo[] = [
-  { id: "seatmap", title: "Seat-map booking", from: "Tickly · Houdini Tickets", blurb: "Concurrent buyers, per-seat mutex locks, zero double-bookings.", tags: ["React", "canvas"], projectSlugs: ["tickly", "houdini"] },
-  { id: "clinic", title: "Clinic automation", from: "DevMechanix", blurb: "An n8n flow from WhatsApp message to confirmed, reminded appointment.", tags: ["n8n", "LLM"], projectSlugs: ["clinic"] },
-  { id: "tapreview", title: "Review flow", from: "TapReview", blurb: "Half-star rating to a copied, editable Google review in three taps.", tags: ["JS"], projectSlugs: ["tapreview"] },
-  { id: "rag", title: "RAG search", from: "DevMechanix", blurb: "Retrieve, rank, and answer from a small knowledge base.", tags: ["Python", "LangChain"], projectSlugs: ["rag"] },
-  { id: "etl", title: "ETL pipeline", from: "Airflow", blurb: "Transactions moving through validate → transform → reclassify → load, with retries.", tags: ["Airflow"], projectSlugs: ["etl"] },
+  { id: "seatmap", hue: "blue", title: "Seat-map booking", from: "Tickly · Houdini Tickets", blurb: "Concurrent buyers, per-seat mutex locks, zero double-bookings.", tags: ["React", "canvas"], projectSlugs: ["tickly", "houdini"] },
+  { id: "clinic", hue: "emerald", title: "Clinic automation", from: "DevMechanix", blurb: "An n8n flow from WhatsApp message to confirmed, reminded appointment.", tags: ["n8n", "LLM"], projectSlugs: ["clinic"] },
+  { id: "tapreview", hue: "amber", title: "Review flow", from: "TapReview", blurb: "Half-star rating to a copied, editable Google review in three taps.", tags: ["JS"], projectSlugs: ["tapreview"] },
+  { id: "rag", hue: "violet", title: "RAG search", from: "DevMechanix", blurb: "Retrieve, rank, and answer from a small knowledge base.", tags: ["Python", "LangChain"], projectSlugs: ["rag"] },
+  { id: "etl", hue: "cyan", title: "ETL pipeline", from: "Airflow", blurb: "Transactions moving through validate → transform → reclassify → load, with retries.", tags: ["Airflow"], projectSlugs: ["etl"] },
 ];
 
 // Cards the assistant can attach to an answer. Ids are stable; the chat route lists them to the model.

@@ -8,11 +8,18 @@ const COLS = 12;
 const PRICE = 45;
 const SOLD_AT_START = new Set(["A3", "A4", "B7", "C1", "C2", "D9", "E5", "E6", "F11"]);
 
+// Colour carries meaning: blue = yours, amber = held by someone (pending), rose = gone.
 const seatClass: Record<Status, string> = {
-  free: "bg-surface-2 border-hairline hover:border-hairline-strong",
-  selected: "bg-primary border-primary text-white",
-  held: "bg-surface-4 border-hairline-strong text-ink-subtle animate-pulse",
-  sold: "bg-surface-1 border-hairline text-ink-tertiary cursor-not-allowed",
+  free: "bg-surface-2 border-hairline text-ink-subtle hover:border-hue-blue/60 hover:text-ink",
+  selected: "bg-hue-blue border-hue-blue text-white shadow-[0_0_0_3px_rgb(var(--hue-blue)/0.2)]",
+  held: "bg-hue-amber/20 border-hue-amber text-hue-amber animate-pulse",
+  sold: "bg-hue-rose/15 border-hue-rose/40 text-hue-rose/70 cursor-not-allowed line-through",
+};
+const legendSwatch: Record<Status, string> = {
+  free: "bg-surface-2 border-hairline",
+  selected: "bg-hue-blue border-hue-blue",
+  held: "bg-hue-amber/30 border-hue-amber",
+  sold: "bg-hue-rose/20 border-hue-rose/50",
 };
 
 const initial = () =>
@@ -59,7 +66,7 @@ export default function SeatMap() {
   return (
     <div className="grid gap-6 lg:grid-cols-[1fr_280px]">
       <div>
-        <div className="mb-3 rounded-sm border border-hairline bg-surface-1 py-1 text-center font-mono text-[11px] text-ink-tertiary">STAGE</div>
+        <div className="mb-3 rounded-sm border border-hue-blue/30 bg-hue-blue/10 py-1 text-center font-mono text-[11px] tracking-[0.3em] text-hue-blue">STAGE</div>
         <div className="overflow-x-auto">
           <div className="grid gap-1.5" style={{ gridTemplateColumns: `1.25rem repeat(${COLS}, minmax(1.5rem, 1fr))` }} role="group" aria-label="Seat map">
             {ROWS.map((r) => (
@@ -90,8 +97,8 @@ export default function SeatMap() {
         <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs text-ink-subtle">
           {(["free", "selected", "held", "sold"] as Status[]).map((s) => (
             <li key={s} className="flex items-center gap-1.5">
-              <span className={`inline-block size-3 rounded-[3px] border ${seatClass[s].split(" ").slice(0, 2).join(" ")}`} />
-              {s}
+              <span className={`inline-block size-3 rounded-[3px] border ${legendSwatch[s]}`} />
+              {s === "held" ? "held by another buyer" : s}
             </li>
           ))}
         </ul>
@@ -111,7 +118,11 @@ export default function SeatMap() {
           </button>
         </div>
         <pre className="min-h-[9rem] flex-1 overflow-auto rounded-md border border-hairline bg-surface-1 p-3 font-mono text-[11px] leading-relaxed text-ink-subtle" aria-live="polite">
-          {log.join("\n")}
+          {log.map((l, i) => (
+            <div key={i} className={/REJECTED/.test(l) ? "text-hue-rose" : /COMMIT/.test(l) ? "text-hue-emerald" : /LOCK/.test(l) ? "text-hue-amber" : ""}>
+              {l}
+            </div>
+          ))}
         </pre>
         <p className="text-xs text-ink-tertiary">Click or drag across seats, then book. A second buyer races you for the same seat and loses.</p>
       </div>

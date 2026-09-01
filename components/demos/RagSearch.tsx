@@ -73,7 +73,7 @@ export default function RagSearch() {
         </ul>
         <ol className="flex flex-wrap gap-x-2 gap-y-1 font-mono text-[11px] text-ink-tertiary">
           {["embed query", "cosine over 8 chunks", "top-3", "answer"].map((s, i) => (
-            <li key={s} className={asked ? "text-ink-subtle" : ""}>
+            <li key={s} className={asked ? ["text-hue-cyan", "text-hue-blue", "text-hue-violet", "text-hue-emerald"][i] : ""}>
               {i + 1}. {s}
               {i < 3 && <span className="ml-2">→</span>}
             </li>
@@ -84,23 +84,27 @@ export default function RagSearch() {
 
       <div className="space-y-3">
         {asked && !results.length && <p className="text-sm text-ink-subtle">Nothing in the knowledge base matches that. The real system would say so instead of guessing.</p>}
-        {results.map((r, i) => (
-          <div key={r.id} className={`rounded-md border p-3 ${i === 0 ? "border-hairline-strong bg-surface-2" : "border-hairline bg-surface-1"}`}>
-            <div className="mb-1.5 flex items-center justify-between font-mono text-[11px] text-ink-tertiary">
+        {results.map((r, i) => {
+          const tier = ["text-hue-emerald bg-hue-emerald border-hue-emerald/40", "text-hue-blue bg-hue-blue border-hue-blue/40", "text-hue-amber bg-hue-amber border-hue-amber/40"][i];
+          const [text, bar, border] = tier.split(" ");
+          return (
+          <div key={r.id} className={`rounded-md border p-3 ${i === 0 ? `${border} bg-surface-2` : "border-hairline bg-surface-1"}`}>
+            <div className={`mb-1.5 flex items-center justify-between font-mono text-[11px] ${text}`}>
               <span>
                 {r.id} · {r.title}
               </span>
               <span className="tabular-nums">{r.score.toFixed(2)}</span>
             </div>
             <div className="mb-2 h-1 overflow-hidden rounded-full bg-hairline">
-              <div className="h-full bg-primary transition-[width] duration-500" style={{ width: `${r.score * 100}%` }} />
+              <div className={`h-full ${bar} transition-[width] duration-500`} style={{ width: `${r.score * 100}%` }} />
             </div>
             <p className="text-sm leading-relaxed text-ink-muted">{r.text}</p>
           </div>
-        ))}
+          );
+        })}
         {top && (
-          <div className="rounded-md border border-hairline p-3">
-            <p className="mb-1 font-mono text-[11px] text-ink-tertiary">answer · grounded in {top.id}</p>
+          <div className="rounded-md border border-hue-violet/40 bg-hue-violet/5 p-3">
+            <p className="mb-1 font-mono text-[11px] text-hue-violet">answer · grounded in {top.id}</p>
             <p className="text-sm leading-relaxed">{top.text.split(". ")[0]}.</p>
           </div>
         )}

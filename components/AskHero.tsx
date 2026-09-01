@@ -5,6 +5,7 @@ import { demos, personalInfo, projects } from "@/constants/data";
 import { emit, on, scrollToId } from "@/lib/bus";
 import LiveStatus, { useLocalClock } from "./LiveStatus";
 import TechStack from "./TechStack";
+import { hueBorder } from "@/lib/hue";
 import { Download } from "./icons";
 
 type Msg = { role: "user" | "assistant"; content: string; cards?: string[] };
@@ -35,7 +36,7 @@ function Card({ id }: { id: string }) {
     const d = demos.find((x) => x.id === id.slice(5));
     if (!d) return null;
     return (
-      <button type="button" onClick={() => { emit("open-demo", d.id); scrollToId("demos"); }} className={base}>
+      <button type="button" onClick={() => { emit("open-demo", d.id); scrollToId("demos"); }} className={`${base} border-l-2 ${hueBorder[d.hue].replace("border-", "border-l-")}`}>
         <b className="font-medium">▶ {d.title}</b>
         <span className="text-ink-subtle">Live demo · {d.blurb}</span>
       </button>
@@ -45,7 +46,7 @@ function Card({ id }: { id: string }) {
     const p = projects.find((x) => x.slug === id.slice(8));
     if (!p) return null;
     return (
-      <button type="button" onClick={() => { emit("open-project", p.slug); scrollToId("work"); }} className={base}>
+      <button type="button" onClick={() => { emit("open-project", p.slug); scrollToId("work"); }} className={`${base} border-l-2 ${hueBorder[p.hue].replace("border-", "border-l-")}`}>
         <b className="font-medium">{p.title}</b>
         <span className="text-ink-subtle">{p.tags.slice(0, 3).join(" · ")}</span>
       </button>
@@ -60,7 +61,7 @@ function Card({ id }: { id: string }) {
     );
   if (id === "contact")
     return (
-      <button type="button" onClick={() => scrollToId("contact")} className={base}>
+      <button type="button" onClick={() => scrollToId("contact")} className={`${base} border-l-2 border-l-hue-rose`}>
         <b className="font-medium">Get in touch</b>
         <span className="text-ink-subtle">{personalInfo.email}</span>
       </button>
@@ -69,7 +70,7 @@ function Card({ id }: { id: string }) {
   if (id === "stack") return null;
   if (id === "availability")
     return (
-      <div className={base}>
+      <div className={`${base} border-l-2 border-l-hue-emerald`}>
         <b className="font-medium">Availability</b>
         <span className="text-ink-subtle">{personalInfo.availability}</span>
       </div>
@@ -78,12 +79,12 @@ function Card({ id }: { id: string }) {
 }
 
 // Chips either ask the assistant, jump to a section, or answer locally (no API call, never rate-limited).
-const chips: { label: string; ask?: string; go?: string; local?: Msg }[] = [
-  { label: "Projects", ask: "What has he shipped, and which are featured?" },
-  { label: "Live demos", go: "demos" },
-  { label: "Stack", local: { role: "assistant", content: "Front to back, grouped by where each tool sits in the system. Comfortable owning any layer end to end.", cards: ["stack"] } },
-  { label: "Availability", ask: "Is he available for freelance or full-time work?" },
-  { label: "Contact", go: "contact" },
+const chips: { label: string; hue: string; ask?: string; go?: string; local?: Msg }[] = [
+  { label: "Projects", hue: "blue", ask: "What has he shipped, and which are featured?" },
+  { label: "Live demos", hue: "violet", go: "demos" },
+  { label: "Stack", hue: "cyan", local: { role: "assistant", content: "Front to back, grouped by where each tool sits in the system. Comfortable owning any layer end to end.", cards: ["stack"] } },
+  { label: "Availability", hue: "emerald", ask: "Is he available for freelance or full-time work?" },
+  { label: "Contact", hue: "rose", go: "contact" },
 ];
 
 export default function AskHero() {
@@ -143,9 +144,10 @@ export default function AskHero() {
         <span aria-hidden className="grid size-5 place-items-center rounded-full bg-ink text-[10px] text-canvas">◐</span>
         Located in {personalInfo.location.split(",")[0]} · {personalInfo.timezone}
         {time && <span className="tabular-nums">· {time}</span>}
+        <span aria-hidden className="ml-0.5 size-1.5 rounded-full bg-hue-emerald" />
       </span>
 
-      <div aria-hidden className="mt-7 grid size-14 place-items-center rounded-2xl bg-primary text-lg font-semibold tracking-tight text-white shadow-[var(--panel-shadow)]">
+      <div aria-hidden className="mt-7 grid size-14 place-items-center rounded-2xl bg-gradient-to-br from-hue-blue to-hue-violet text-lg font-semibold tracking-tight text-white shadow-[0_8px_24px_-8px_rgb(var(--hue-violet)/0.5)]">
         MA
       </div>
       <p className="mt-4 text-[15px] text-ink-subtle">Hey, I&rsquo;m {personalInfo.name.split(" ")[0]}</p>
@@ -182,6 +184,7 @@ export default function AskHero() {
             key={c.label}
             type="button"
             className="chip"
+            style={{ ["--chip" as string]: `rgb(var(--hue-${c.hue}))` }}
             onClick={() => {
               if (c.go) return scrollToId(c.go);
               if (c.local) return setMessages((m) => [...m, { role: "user", content: c.label }, c.local!]);

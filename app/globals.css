@@ -33,6 +33,13 @@
     --scroll-thumb-hover: #a1a1a1;
     --dots: rgb(0 0 0 / 0.08);
     --watermark: rgb(0 0 0 / 0.035);
+    /* Semantic hues (light): saturated enough to read on white, used for states and per-project identity */
+    --hue-blue: 0 112 243;
+    --hue-violet: 124 58 237;
+    --hue-emerald: 5 150 105;
+    --hue-amber: 217 119 6;
+    --hue-rose: 225 29 72;
+    --hue-cyan: 8 145 178;
   }
 
   /* Dark — Linear (DESIGN.dark.md) */
@@ -65,6 +72,13 @@
     --scroll-thumb-hover: #34343a;
     --dots: rgb(255 255 255 / 0.07);
     --watermark: rgb(255 255 255 / 0.035);
+    /* Semantic hues (dark): lifted so they glow on near-black without going neon */
+    --hue-blue: 96 165 250;
+    --hue-violet: 167 139 250;
+    --hue-emerald: 52 211 153;
+    --hue-amber: 251 191 36;
+    --hue-rose: 251 113 133;
+    --hue-cyan: 34 211 238;
   }
 
   html {
@@ -182,7 +196,8 @@
   }
   .chip::before {
     content: "";
-    @apply size-1.5 rounded-sm bg-accent;
+    @apply size-1.5 rounded-sm;
+    background: var(--chip, rgb(var(--accent)));
   }
 }
 

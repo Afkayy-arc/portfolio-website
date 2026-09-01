@@ -55,7 +55,7 @@ export default function ReviewFlow() {
           <div className="flex items-center gap-3">
             <div className="relative text-2xl leading-none tracking-[2px] text-hairline-strong" aria-hidden>
               ★★★★★
-              <div className="absolute inset-0 overflow-hidden text-primary" style={{ width: `${(rating / 5) * 100}%` }}>
+              <div className="absolute inset-0 overflow-hidden text-hue-amber" style={{ width: `${(rating / 5) * 100}%` }}>
                 ★★★★★
               </div>
             </div>
@@ -63,7 +63,7 @@ export default function ReviewFlow() {
           </div>
           <label className="mt-3 block">
             <span className="sr-only">Rating</span>
-            <input type="range" min={1} max={5} step={0.5} value={rating} onChange={(e) => setRating(Number(e.target.value))} className="w-full accent-[rgb(var(--primary))]" />
+            <input type="range" min={1} max={5} step={0.5} value={rating} onChange={(e) => setRating(Number(e.target.value))} className="w-full accent-[rgb(var(--hue-amber))]" />
           </label>
         </div>
         <div>
@@ -76,7 +76,12 @@ export default function ReviewFlow() {
           <ul className="space-y-2">
             {suggestions.map((s) => (
               <li key={s}>
-                <button type="button" onClick={() => setDraft(s)} aria-pressed={draft === s} className={`w-full rounded-md border px-3 py-2 text-left text-sm leading-relaxed transition-colors ${draft === s ? "border-primary bg-surface-2 text-ink" : "border-hairline bg-surface-1 text-ink-muted hover:border-hairline-strong"}`}>
+                <button
+                  type="button"
+                  onClick={() => setDraft(s)}
+                  aria-pressed={draft === s}
+                  className={`w-full rounded-md border-l-2 border border-hairline px-3 py-2 text-left text-sm leading-relaxed transition-colors ${tier === "high" ? "border-l-hue-emerald" : tier === "mid" ? "border-l-hue-amber" : "border-l-hue-rose"} ${draft === s ? "bg-surface-2 text-ink border-hairline-strong" : "bg-surface-1 text-ink-muted hover:border-hairline-strong"}`}
+                >
                   {s}
                 </button>
               </li>

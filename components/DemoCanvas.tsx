@@ -3,18 +3,20 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { demos, personalInfo } from "@/constants/data";
 import { on } from "@/lib/bus";
+import { hueBgSoft, hueBorder, hueStroke, hueText } from "@/lib/hue";
+import type { Hue } from "@/constants/data";
 import { demoComponents } from "./demos";
 import LiveDemos from "./LiveDemos";
 
 const W = 212;
 type Rect = { x: number; y: number; w: number; h: number };
-type NodeDef = { id: string; x: number; y: number; icon: string; title: string; body: string; kind: "trigger" | "demo" | "out" };
+type NodeDef = { id: string; x: number; y: number; icon: string; title: string; body: string; kind: "trigger" | "demo" | "out"; hue?: Hue };
 
 const nodes: NodeDef[] = [
-  { id: "trigger", kind: "trigger", x: 40, y: 236, icon: "⚡", title: "Visitor lands", body: `${personalInfo.location.split(",")[0]} · ${personalInfo.timezone}` },
-  ...demos.map((d, i) => ({ id: d.id, kind: "demo" as const, x: 360, y: 20 + i * 104, icon: ["▦", "◇", "★", "◎", "⇶"][i], title: d.title, body: d.blurb })),
-  { id: "run", kind: "out", x: 680, y: 150, icon: "▶", title: "Run inline", body: "Selected demo mounts below the canvas." },
-  { id: "contact", kind: "out", x: 680, y: 380, icon: "✉", title: "Contact", body: personalInfo.email },
+  { id: "trigger", kind: "trigger", x: 40, y: 236, icon: "⚡", hue: "emerald", title: "Visitor lands", body: `${personalInfo.location.split(",")[0]} · ${personalInfo.timezone}` },
+  ...demos.map((d, i) => ({ id: d.id, kind: "demo" as const, x: 360, y: 20 + i * 104, icon: ["▦", "◇", "★", "◎", "⇶"][i], title: d.title, body: d.blurb, hue: d.hue })),
+  { id: "run", kind: "out", x: 680, y: 150, icon: "▶", hue: "violet", title: "Run inline", body: "Selected demo mounts below the canvas." },
+  { id: "contact", kind: "out", x: 680, y: 380, icon: "✉", hue: "rose", title: "Contact", body: personalInfo.email },
 ];
 
 const wire = (a: Rect, b: Rect) => {
@@ -59,6 +61,7 @@ export default function DemoCanvas() {
 
   const Demo = demoComponents[selected];
   const demo = demos.find((d) => d.id === selected)!;
+  const selHue = demo.hue;
 
   const onDown = (e: React.PointerEvent) => {
     // Nodes and buttons handle their own clicks; pointer capture would otherwise steal them.
@@ -107,8 +110,8 @@ export default function DemoCanvas() {
               <div ref={layer} className="absolute inset-0 transition-transform duration-75 ease-out" style={{ transform: `translate(${pan.x}px, ${pan.y}px)` }}>
                 <svg className="pointer-events-none absolute inset-0 h-full w-full overflow-visible">
                   <g fill="none" strokeWidth={1.5}>
-                    {r("trigger") && demos.map((d) => r(d.id) && <path key={`t-${d.id}`} d={wire(r("trigger"), r(d.id))} className="stroke-hairline-strong" />)}
-                    {r("run") && demos.map((d) => r(d.id) && <path key={`r-${d.id}`} d={wire(r(d.id), r("run"))} className={d.id === selected ? "stroke-accent" : "stroke-hairline"} />)}
+                    {r("trigger") && demos.map((d) => r(d.id) && <path key={`t-${d.id}`} d={wire(r("trigger"), r(d.id))} className={d.id === selected ? `${hueStroke[d.hue]} opacity-70` : "stroke-hairline-strong"} />)}
+                    {r("run") && demos.map((d) => r(d.id) && <path key={`r-${d.id}`} d={wire(r(d.id), r("run"))} className={d.id === selected ? `${hueStroke[d.hue]} [stroke-width:2]` : "stroke-hairline"} />)}
                     {r("run") && r("contact") && <path d={wire(r("run"), r("contact"))} className="stroke-hairline" />}
                   </g>
                 </svg>
@@ -130,10 +133,10 @@ export default function DemoCanvas() {
                       style={{ left: n.x, top: n.y, width: W }}
                       className={`absolute text-left rounded-xl border bg-surface-1 text-xs shadow-[var(--panel-shadow)] transition-colors ${
                         n.kind === "trigger" ? "rounded-r-[36px]" : ""
-                      } ${active ? "border-accent" : "border-hairline"} ${isDemo ? "cursor-pointer hover:border-hairline-strong" : ""}`}
+                      } ${active ? hueBorder[selHue] : "border-hairline"} ${isDemo ? "cursor-pointer hover:border-hairline-strong" : ""}`}
                     >
                       <header className={`flex items-center gap-2 px-3 py-2.5 text-[13px] font-medium ${n.kind === "trigger" ? "" : "border-b border-hairline"}`}>
-                        <span aria-hidden className="grid size-[22px] shrink-0 place-items-center rounded-md border border-hairline bg-surface-2 text-[10px] text-ink-subtle">
+                        <span aria-hidden className={`grid size-[22px] shrink-0 place-items-center rounded-md border border-transparent text-[10px] ${n.hue ? `${hueBgSoft[n.hue]} ${hueText[n.hue]}` : "bg-surface-2 text-ink-subtle"}`}>
                           {n.icon}
                         </span>
                         {n.title}
@@ -149,8 +152,8 @@ export default function DemoCanvas() {
                           )}
                         </p>
                       </div>
-                      {n.kind !== "out" && <span aria-hidden className={`absolute -right-[5px] top-1/2 size-[9px] -translate-y-1/2 rounded-full border-2 bg-canvas ${active ? "border-accent" : "border-hairline-strong"}`} />}
-                      {n.kind !== "trigger" && <span aria-hidden className={`absolute -left-[5px] top-1/2 size-[9px] -translate-y-1/2 rounded-full border-2 bg-canvas ${active ? "border-accent" : "border-hairline-strong"}`} />}
+                      {n.kind !== "out" && <span aria-hidden className={`absolute -right-[5px] top-1/2 size-[9px] -translate-y-1/2 rounded-full border-2 bg-canvas ${active ? hueBorder[selHue] : "border-hairline-strong"}`} />}
+                      {n.kind !== "trigger" && <span aria-hidden className={`absolute -left-[5px] top-1/2 size-[9px] -translate-y-1/2 rounded-full border-2 bg-canvas ${active ? hueBorder[selHue] : "border-hairline-strong"}`} />}
                     </Tag>
                   );
                 })}
@@ -168,7 +171,7 @@ export default function DemoCanvas() {
 
             <div className="panel mt-4 p-5 md:p-6">
               <header className="mb-5 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-                <h3 className="text-[22px] font-medium leading-tight tracking-[-0.4px]">{demo.title}</h3>
+                <h3 className="flex items-center gap-2.5 text-[22px] font-medium leading-tight tracking-[-0.4px]"><span aria-hidden className={`size-2.5 rounded-[3px] ${hueBgSoft[selHue].replace("/10", "")}`} />{demo.title}</h3>
                 <p className="font-mono text-[11px] text-ink-tertiary">rebuilt from · {demo.from}</p>
                 <p className="w-full text-sm text-ink-subtle">{demo.blurb}</p>
                 <div className="flex gap-1.5">

@@ -4,7 +4,7 @@ import DemoCanvas from "@/components/DemoCanvas";
 import ProjectStrips from "@/components/ProjectStrips";
 import BioToggle from "@/components/BioToggle";
 import ExperienceList from "@/components/ExperienceList";
-import ContactForm from "@/components/ContactForm";
+import ProjectBrief from "@/components/ProjectBrief";
 import CopyEmail from "@/components/CopyEmail";
 import Footer from "@/components/Footer";
 import Terminal from "@/components/Terminal";
@@ -78,16 +78,15 @@ export default function Home() {
               <ExperienceList />
             </div>
 
-            <div id="contact" className="mt-20 scroll-mt-6 grid gap-10 md:grid-cols-[1fr_2fr] md:gap-14">
-              <div>
-                <p className="eyebrow">Contact</p>
-                <h3 className="mt-3 text-[28px] font-semibold leading-tight tracking-[-0.6px]">Have a project in mind?</h3>
-                <p className="mt-3 max-w-[40ch] text-ink-subtle">{personalInfo.availability}. Send a brief and I’ll come back with questions and a rough scope.</p>
-                <div className="mt-5">
-                  <CopyEmail />
+            <div id="contact" className="mt-24 scroll-mt-6">
+              <div className="mb-8 flex flex-wrap items-end justify-between gap-x-12 gap-y-4">
+                <div>
+                  <p className="eyebrow">Start a project</p>
+                  <h3 className="mt-3 text-[28px] font-semibold leading-tight tracking-[-0.6px] md:text-[34px] md:tracking-[-0.9px]">Tell me what you’re building</h3>
+                  <p className="mt-3 max-w-[52ch] text-ink-subtle">Three taps and a line or two. The brief assembles on the right; send it and I’ll come back with questions and a rough scope within a working day.</p>
                 </div>
               </div>
-              <ContactForm />
+              <ProjectBrief />
             </div>
           </div>
         </section>

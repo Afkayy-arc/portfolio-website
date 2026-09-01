@@ -36,7 +36,7 @@ export default function Rail() {
 
   const btn = (isActive: boolean) =>
     `group relative flex size-10 items-center justify-center rounded-[10px] border transition-colors ${
-      isActive ? "border-hairline bg-surface-1 text-ink" : "border-transparent text-ink-subtle hover:border-hairline hover:bg-surface-1 hover:text-ink"
+      isActive ? "border-accent/40 bg-accent/10 text-accent" : "border-transparent text-ink-subtle hover:border-hairline hover:bg-surface-1 hover:text-ink"
     }`;
 
   const tip = (label: string) => (
@@ -75,7 +75,7 @@ export default function Rail() {
       </button>
       <div className="hidden md:block md:flex-1" />
       <ThemeToggle className="border-transparent bg-transparent" />
-      <span className="hidden md:my-2 md:block md:size-2 md:rounded-full md:bg-success" title={personalInfo.availability} />
+      <span className="hidden md:my-2 md:block md:size-2 md:rounded-full md:bg-hue-emerald md:shadow-[0_0_0_3px_rgb(var(--hue-emerald)/0.2)]" title={personalInfo.availability} />
     </nav>
   );
 }

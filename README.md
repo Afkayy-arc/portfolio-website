@@ -21,8 +21,13 @@ There is no top navigation. A **side rail** (`components/Rail.tsx`; a bottom bar
 
 - **Ask hero** (`AskHero.tsx`) — the AI assistant is the front door. Streams from `app/api/chat/route.ts` (Gemini, system prompt built from `constants/data.ts`, scoped to Muhammad's work, 30 msg/hour/IP). The model appends `[[cards: id, …]]`; the hero strips it and renders demo/project/contact/CV cards. `LiveStatus.tsx` shows live facts from `app/api/status/route.ts` (GitHub last commit, Open-Meteo weather; cached 10–30 min; anything that fails is omitted, never faked).
 - **Demos** (`DemoCanvas.tsx`) — n8n-style workflow canvas: drag to pan, click a node to mount that demo below. Below `lg`, and via the Canvas/List toggle, `LiveDemos.tsx` (tabbed carousel) is the fallback. Demo metadata lives in `constants/data.ts` (`demos`); components in `components/demos/`, keyed by id in `components/demos/index.ts`.
-- **Work** (`ProjectStrips.tsx`) — film-strip gallery with each project's image from `public/projects/<slug>.png`; hover/focus widens a strip. Below `md`, `ProjectList.tsx` rows with thumbnails.
-- **About** — `BioToggle.tsx` (short/long), facts panel, `ExperienceList` (full width), `ContactForm`. The stack lives in the hero: the Stack chip answers locally (no API call) and renders `TechStack` inline.
+- **Work** (`ProjectStrips.tsx`) — film-strip gallery with each project's thumbnail from `public/projects/<slug>.png`; hover/focus widens a strip. Below `md`, `ProjectList.tsx` rows with thumbnails. Thumbnails are generated, not photographed: `scripts/thumbnails.mjs` renders one SVG composition per project in its hue (see the command in the file header).
+- **About** — `BioToggle.tsx` (short/long), facts panel, `ExperienceList` (full width). The stack lives in the hero: the Stack chip answers locally (no API call) and renders `TechStack` inline.
+- **Start a project** (`ProjectBrief.tsx`) — replaces the contact form: pick type / timeline / budget chips, add a note, and the brief assembles as a ticket card; "Send brief" posts to `/api/contact`, "Copy as email" copies a ready-to-send message.
+
+### Colour
+
+Six semantic hues (`--hue-blue/violet/emerald/amber/rose/cyan`, tuned per theme in `globals.css`, exposed as `hue.*` in Tailwind, class maps in `lib/hue.ts`). Every project and demo has a `hue` in `constants/data.ts` that follows it through canvas nodes, strips, cards and thumbnails. Demo states use them semantically: seats blue = yours, amber = held, rose = sold; ETL stages and categories, clinic node states, RAG score tiers.
 - **Terminal** (`Terminal.tsx`) — press `` ` `` or the rail icon. `help`, `projects`, `open <slug>`, `demo <id>`, `stack`, `experience`, `contact`, `cv`, `ask <q>`, `theme`, `clear`.
 
 Gemini notes: `GEMINI_MODEL` defaults to `gemini-3.5-flash`; keep `thinkingConfig.thinkingBudget: 0` in the chat route or flash models spend the output budget on hidden reasoning.

@@ -55,7 +55,7 @@ export default function ClinicFlow() {
           <legend className="mb-2 text-xs text-ink-subtle">Patient asks for</legend>
           <div className="flex flex-wrap gap-1.5">
             {REASONS.map((r) => (
-              <button key={r} type="button" onClick={() => setReason(r)} aria-pressed={reason === r} disabled={running} className={`tag h-8 cursor-pointer px-3 font-sans transition-colors ${reason === r ? "border-primary text-ink" : "hover:border-hairline-strong"}`}>
+              <button key={r} type="button" onClick={() => setReason(r)} aria-pressed={reason === r} disabled={running} className={`tag h-8 cursor-pointer px-3 font-sans transition-colors ${reason === r ? (r === "Toothache" ? "border-hue-rose bg-hue-rose/10 text-ink" : "border-hue-emerald bg-hue-emerald/10 text-ink") : "hover:border-hairline-strong"}`}>
                 {r}
               </button>
             ))}
@@ -65,7 +65,7 @@ export default function ClinicFlow() {
           <legend className="mb-2 text-xs text-ink-subtle">Slot</legend>
           <div className="flex flex-wrap gap-1.5">
             {SLOTS.map((s) => (
-              <button key={s} type="button" onClick={() => setSlot(s)} aria-pressed={slot === s} disabled={running} className={`tag h-8 cursor-pointer px-3 transition-colors ${slot === s ? "border-primary text-ink" : "hover:border-hairline-strong"}`}>
+              <button key={s} type="button" onClick={() => setSlot(s)} aria-pressed={slot === s} disabled={running} className={`tag h-8 cursor-pointer px-3 transition-colors ${slot === s ? "border-hue-blue bg-hue-blue/10 text-ink" : "hover:border-hairline-strong"}`}>
                 {s}
               </button>
             ))}
@@ -85,13 +85,17 @@ export default function ClinicFlow() {
               <li key={n} className="flex items-center sm:flex-col sm:items-stretch">
                 <div
                   className={`flex-1 rounded-md border px-2.5 py-2 text-xs transition-colors ${
-                    state === "done" ? "border-hairline-strong bg-surface-2 text-ink" : state === "active" ? "border-primary bg-surface-1 text-ink" : "border-hairline bg-surface-1 text-ink-subtle"
+                    state === "done"
+                      ? "border-hue-emerald/50 bg-hue-emerald/10 text-ink"
+                      : state === "active"
+                        ? `${urgent ? "border-hue-rose bg-hue-rose/10" : "border-hue-blue bg-hue-blue/10"} text-ink animate-pulse`
+                        : "border-hairline bg-surface-1 text-ink-subtle"
                   }`}
                 >
-                  <span className="mr-1.5 font-mono text-[10px] text-ink-tertiary">{i + 1}</span>
+                  <span className={`mr-1.5 font-mono text-[10px] ${state === "done" ? "text-hue-emerald" : state === "active" ? (urgent ? "text-hue-rose" : "text-hue-blue") : "text-ink-tertiary"}`}>{state === "done" ? "✓" : i + 1}</span>
                   {n}
                 </div>
-                {i < NODES.length - 1 && <span aria-hidden className={`hidden h-px w-3 shrink-0 sm:block ${step > i ? "bg-hairline-strong" : "bg-hairline"}`} style={{ marginTop: 18 }} />}
+                {i < NODES.length - 1 && <span aria-hidden className={`hidden h-px w-3 shrink-0 sm:block ${step > i ? "bg-hue-emerald/60" : "bg-hairline"}`} style={{ marginTop: 18 }} />}
               </li>
             );
           })}

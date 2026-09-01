@@ -7,6 +7,8 @@ const v = (name: string) => `rgb(var(--${name}) / <alpha-value>)`;
 const config: Config = {
   darkMode: "class",
   content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
+  // Hue utilities are sometimes composed at runtime (`border-hue-${hue}`); keep them all.
+  safelist: [{ pattern: /^(bg|text|border|border-l|stroke)-hue-(blue|violet|emerald|amber|rose|cyan)$/, variants: ["hover"] }, { pattern: /^bg-hue-(blue|violet|emerald|amber|rose|cyan)\/(10|15|20)$/ }, { pattern: /^border-hue-(blue|violet|emerald|amber|rose|cyan)\/(40|50|60)$/ }],
   theme: {
     extend: {
       colors: {
@@ -17,6 +19,7 @@ const config: Config = {
         primary: { DEFAULT: v("primary"), hover: v("primary-hover"), focus: v("primary-focus") },
         accent: v("accent"),
         success: v("success"),
+        hue: { blue: v("hue-blue"), violet: v("hue-violet"), emerald: v("hue-emerald"), amber: v("hue-amber"), rose: v("hue-rose"), cyan: v("hue-cyan") },
       },
       fontFamily: {
         sans: ["var(--font-geist-sans)", "SF Pro Display", "-apple-system", "system-ui", "sans-serif"],

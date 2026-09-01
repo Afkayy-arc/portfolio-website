@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { projects } from "@/constants/data";
 import { on } from "@/lib/bus";
+import { hueBg, hueBorderSoft, hueText } from "@/lib/hue";
 import ProjectList from "./ProjectList";
 import { ArrowUpRight } from "./icons";
 
@@ -26,7 +27,7 @@ export default function ProjectStrips() {
               role="listitem"
               onMouseEnter={() => setActive(p.slug)}
               onFocus={() => setActive(p.slug)}
-              className={`relative min-w-0 overflow-hidden rounded-lg border bg-surface-1 transition-[flex] duration-300 ${open ? "flex-[4.5] border-hairline-strong" : "flex-1 border-hairline"}`}
+              className={`relative min-w-0 overflow-hidden rounded-lg border bg-surface-1 transition-[flex] duration-300 ${open ? `flex-[4.5] ${hueBorderSoft[p.hue]}` : "flex-1 border-hairline hover:border-hairline-strong"}`}
             >
               {p.image ? (
                 <Image
@@ -35,7 +36,7 @@ export default function ProjectStrips() {
                   fill
                   sizes="(min-width: 1280px) 900px, 70vw"
                   priority={i < 2}
-                  className={`object-cover transition-[opacity,filter] duration-300 ${open ? "opacity-100" : "opacity-40 grayscale"}`}
+                  className={`object-cover transition-[opacity,filter] duration-300 ${open ? "opacity-100" : "opacity-60"}`}
                 />
               ) : (
                 <div className="dotgrid absolute inset-0" />
@@ -43,12 +44,13 @@ export default function ProjectStrips() {
               {/* Legibility scrim: heavier when open (text sits on the image), light otherwise */}
               <div className={`absolute inset-0 ${open ? "bg-gradient-to-t from-canvas via-canvas/70 to-canvas/10" : "bg-gradient-to-t from-canvas/90 via-canvas/30 to-transparent"}`} />
 
-              <span className="absolute left-3 top-2.5 font-mono text-[11px] text-ink-tertiary">{String(i + 1).padStart(2, "0")}</span>
-              {p.featured && !open && <span aria-hidden className="absolute right-3 top-3 size-1.5 rounded-full bg-accent" />}
+              <span className={`absolute left-3 top-2.5 font-mono text-[11px] ${hueText[p.hue]}`}>{String(i + 1).padStart(2, "0")}</span>
+              {p.featured && !open && <span aria-hidden className={`absolute right-3 top-3 size-1.5 rounded-full ${hueBg[p.hue]}`} />}
 
               {open ? (
                 <div className="absolute inset-x-0 bottom-0 p-5">
                   <div className="flex flex-wrap items-center gap-2">
+                    <span aria-hidden className={`size-2.5 rounded-[3px] ${hueBg[p.hue]}`} />
                     <h3 className="text-xl font-medium tracking-[-0.3px]">{p.title}</h3>
                     {p.featured && <span className="badge">Featured</span>}
                   </div>
