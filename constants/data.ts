@@ -43,7 +43,7 @@ export const personalInfo = {
   social: {
     github: "https://github.com/Afkayy-arc",
     linkedin: "https://linkedin.com/in/afkayyy",
-    upwork: "https://www.upwork.com/freelancers/~01fbe990a14ce10108",
+    upwork: "https://www.upwork.com/freelancers/afkayy",
   },
 };
 

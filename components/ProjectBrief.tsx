@@ -121,13 +121,13 @@ export default function ProjectBrief() {
             <label htmlFor="brief-name" className="text-sm font-medium text-ink-muted">
               Name
             </label>
-            <input id="brief-name" value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" placeholder="Ayesha Rahman" className="input" />
+            <input id="brief-name" value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" placeholder="Enter name" className="input" />
           </div>
           <div className="grid gap-2">
             <label htmlFor="brief-email" className="text-sm font-medium text-ink-muted">
               Email
             </label>
-            <input id="brief-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" spellCheck={false} placeholder="ayesha@studio.co" className="input" />
+            <input id="brief-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" spellCheck={false} placeholder="Enter email" className="input" />
           </div>
           <div className="grid gap-2 sm:col-span-2">
             <label htmlFor="brief-notes" className="text-sm font-medium text-ink-muted">
@@ -194,7 +194,7 @@ export default function ProjectBrief() {
           {[
             { label: "Email", sub: personalInfo.email, href: `mailto:${personalInfo.email}`, Icon: Mail, hue: "rose" },
             { label: "LinkedIn", sub: "afkayyy", href: personalInfo.social.linkedin, Icon: LinkedIn, hue: "blue" },
-            { label: "Upwork", sub: "Hire directly", href: personalInfo.social.upwork, Icon: Upwork, hue: "emerald" },
+            { label: "Upwork", sub: "upwork.com/freelancers/afkayy", href: personalInfo.social.upwork, Icon: Upwork, hue: "emerald" },
             { label: "GitHub", sub: "Afkayy-arc", href: personalInfo.social.github, Icon: GitHub, hue: "violet" },
           ].map(({ label, sub, href, Icon, hue }) => (
             <li key={label}>
