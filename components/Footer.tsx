@@ -10,7 +10,7 @@ const links = [
 
 export default function Footer() {
   return (
-    <footer className="border-t border-hairline">
+    <footer className="border-t border-hairline pb-14 md:pb-0 md:pl-[60px]">
       <div className="mx-auto flex max-w-site flex-col gap-6 px-6 py-10 text-xs text-ink-subtle sm:flex-row sm:items-center sm:justify-between lg:px-8">
         <p>
           © {new Date().getFullYear()} {personalInfo.name}. {personalInfo.location}.

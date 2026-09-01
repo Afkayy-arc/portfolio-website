@@ -18,7 +18,7 @@ export default function CopyEmail({ className = "" }: { className?: string }) {
   };
 
   return (
-    <button type="button" onClick={copy} className={`link font-mono font-normal ${className}`} aria-live="polite">
+    <button type="button" onClick={copy} className={`link max-w-full break-all text-left font-mono font-normal ${className}`} aria-live="polite">
       {personalInfo.email}
       {copied ? <Check className="text-success" /> : <Copy />}
       <span className="sr-only">{copied ? "Copied" : "Copy email address"}</span>

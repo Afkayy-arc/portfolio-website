@@ -15,13 +15,17 @@ Both share Geist Sans/Mono and the same layout. Every colour is a CSS variable i
 
 Everything on the page comes from **`constants/data.ts`**: personal info, metrics, projects, stack, experience, nav. Edit that file and redeploy. The chat assistant's knowledge is generated from the same file, so it stays in sync automatically.
 
-## Interactive demos
+## Page structure
 
-`components/demos/` holds five self-contained React demos (seat-map booking with locks, clinic n8n flow, TapReview review flow, RAG search, Airflow-style ETL). They use fake data and no network calls — the client products they're modelled on are private. `components/LiveDemos.tsx` is the tabbed, swipeable carousel that hosts them; add a demo by appending to its `demos` array.
+There is no top navigation. A **side rail** (`components/Rail.tsx`; a bottom bar below `md`) holds Ask · Demos · Work · About · Terminal · theme. Components talk through a tiny window-event bus (`lib/bus.ts`): `open-demo`, `open-project`, `toggle-terminal`, `focus-ask`.
 
-## Chat assistant
+- **Ask hero** (`AskHero.tsx`) — the AI assistant is the front door. Streams from `app/api/chat/route.ts` (Gemini, system prompt built from `constants/data.ts`, scoped to Muhammad's work, 30 msg/hour/IP). The model appends `[[cards: id, …]]`; the hero strips it and renders demo/project/contact/CV cards. `LiveStatus.tsx` shows live facts from `app/api/status/route.ts` (GitHub last commit, Open-Meteo weather; cached 10–30 min; anything that fails is omitted, never faked).
+- **Demos** (`DemoCanvas.tsx`) — n8n-style workflow canvas: drag to pan, click a node to mount that demo below. Below `lg`, and via the Canvas/List toggle, `LiveDemos.tsx` (tabbed carousel) is the fallback. Demo metadata lives in `constants/data.ts` (`demos`); components in `components/demos/`, keyed by id in `components/demos/index.ts`.
+- **Work** (`ProjectStrips.tsx`) — film-strip gallery; hover/focus widens a strip. Below `md`, `ProjectList.tsx` rows.
+- **About** — `BioToggle.tsx` (short/long), facts panel, `ExperienceList`, `TechStack`, `ContactForm`.
+- **Terminal** (`Terminal.tsx`) — press `` ` `` or the rail icon. `help`, `projects`, `open <slug>`, `demo <id>`, `stack`, `experience`, `contact`, `cv`, `ask <q>`, `theme`, `clear`.
 
-`components/ChatWidget.tsx` is the floating "Ask about my work" button. It streams from `app/api/chat/route.ts`, which calls Google Gemini with a system prompt built from `constants/data.ts` and restricts answers to Muhammad and his work. Rate limited to 30 messages/hour/IP (in-memory). Needs `GEMINI_API_KEY`; `GEMINI_MODEL` defaults to `gemini-3.5-flash` — keep `thinkingConfig.thinkingBudget: 0` in the route or flash models spend the output budget on hidden reasoning.
+Gemini notes: `GEMINI_MODEL` defaults to `gemini-3.5-flash`; keep `thinkingConfig.thinkingBudget: 0` in the chat route or flash models spend the output budget on hidden reasoning.
 
 ## Running
 
@@ -48,16 +52,17 @@ app/
   layout.tsx          fonts, metadata, theme provider, skip link
   page.tsx            section composition
   api/contact/        contact form endpoint (Zod validation, rate limit, Nodemailer)
-  api/chat/           chat assistant endpoint (Gemini, streaming, rate limit)
+  api/chat/           chat assistant endpoint (Gemini, streaming, rate limit, card tags)
+  api/status/         live status facts (GitHub, Open-Meteo), cached
   opengraph-image.tsx generated OG card
   not-found.tsx       404
 components/
-  Navbar, ThemeToggle, Hero, Section, ProjectList, TechStack, ExperienceList,
-  ContactForm, CopyEmail, Footer, Reveal (motion primitive), icons
-  LiveDemos (carousel) + demos/ (SeatMap, ClinicFlow, ReviewFlow, RagSearch, EtlPipeline)
-  ChatWidget
-constants/data.ts     all content
-lib/                  email, rate limiter, validation, site URL
+  Rail, ThemeToggle, AskHero, LiveStatus, DemoCanvas, LiveDemos, ProjectStrips,
+  ProjectList, BioToggle, TechStack, ExperienceList, ContactForm, CopyEmail,
+  Footer, Terminal, Reveal (motion primitive), icons
+  demos/ (SeatMap, ClinicFlow, ReviewFlow, RagSearch, EtlPipeline, index)
+constants/data.ts     all content, demo catalog, card ids
+lib/                  bus (events), email, rate limiter, validation, site URL
 public/CV/            downloadable CV
 public/images/        unused legacy project art
 ```
