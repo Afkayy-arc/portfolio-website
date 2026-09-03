@@ -1,7 +1,9 @@
-// Regenerate project thumbnails: `npx -y playwright install chromium && npx -y -p playwright node scripts/thumbnails.mjs` (run from the repo root).
+// Regenerate project thumbnails: `npx -y playwright install chromium && npx -y -p playwright node scripts/thumbnails.mjs [slug…]` (run from the repo root).
 // Renders one designed thumbnail per project (1200x750) from an HTML/SVG template.
 import { chromium } from "playwright";
 import { writeFileSync } from "fs";
+import { tmpdir } from "os";
+import { join } from "path";
 
 const HUE = { blue: "#60a5fa", violet: "#a78bfa", emerald: "#34d399", amber: "#fbbf24", rose: "#fb7185", cyan: "#22d3ee" };
 const DEEP = { blue: "#0b1220", violet: "#120f22", emerald: "#0a1a15", amber: "#1a1408", rose: "#1c0d12", cyan: "#081a1e" };
@@ -95,7 +97,27 @@ const crm = (h) => `<g transform="translate(560,150)">
   <path d="M370 150 L 420 150" stroke="${h}" stroke-width="2.5"/>
   <g transform="translate(420,20)"><rect width="230" height="260" rx="14" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.12)"/><text x="16" y="28" font-family="ui-monospace,Menlo" font-size="12" fill="rgba(255,255,255,.55)">activity · per rep</text>${[120, 190, 80, 160, 210].map((v, i) => `<rect x="${20 + i * 40}" y="${240 - v}" width="26" height="${v}" rx="5" fill="${[h, h, HUE.amber, h, HUE.emerald][i]}" opacity=".9"/>`).join("")}</g></g>`;
 
+
+const bubble = (x, y, w, text, ai, h) => `<g transform="translate(${x},${y})"><rect width="${w}" height="46" rx="16" fill="${ai ? h : "rgba(255,255,255,.08)"}" opacity="${ai ? ".22" : "1"}" stroke="${ai ? h : "rgba(255,255,255,.12)"}" stroke-opacity="${ai ? ".6" : "1"}"/><text x="18" y="29" font-family="-apple-system,Inter,sans-serif" font-size="16" fill="rgba(255,255,255,.9)">${text}</text></g>`;
+
+const talkvane = (h) => `<g transform="translate(560,110)">
+  <rect width="590" height="530" rx="22" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.12)"/>
+  <text x="24" y="36" font-family="-apple-system,Inter,sans-serif" font-size="15" font-weight="600" fill="#fff">Incoming call</text>
+  <text x="24" y="58" font-family="ui-monospace,Menlo" font-size="12" fill="rgba(255,255,255,.5)">+1 (212) 555-0198 · Bright Smile Dental line</text>
+  <rect x="470" y="22" width="96" height="28" rx="14" fill="${HUE.emerald}" opacity=".2" stroke="${HUE.emerald}"/><text x="518" y="41" text-anchor="middle" font-family="ui-monospace,Menlo" font-size="12" fill="${HUE.emerald}">Connected</text>
+  ${[6, 14, 22, 30, 18, 34, 24, 12, 28, 16, 8, 20, 32, 14, 6, 10, 26, 18, 8, 22, 30, 12, 6].map((v, i) => `<rect x="${24 + i * 12}" y="${96 - v / 2}" width="5" height="${v}" rx="2.5" fill="${h}" opacity="${0.55 + (i % 3) * 0.15}"/>`).join("")}
+  ${bubble(24, 140, 400, "Do you do teeth whitening, and what does it cost?", false, h)}
+  ${bubble(126, 200, 440, "We do. In-office whitening is $349, about an hour.", true, h)}
+  ${bubble(24, 260, 300, "Yes please, next Tuesday morning.", false, h)}
+  <g transform="translate(24,322)"><rect width="330" height="32" rx="8" fill="none" stroke="rgba(255,255,255,.3)" stroke-dasharray="5 4"/><text x="14" y="21" font-family="ui-monospace,Menlo" font-size="12" fill="rgba(255,255,255,.6)">rag: services.pdf · cal.com: Tue 09:00–12:00</text></g>
+  ${bubble(166, 370, 400, "I have 10:30 on Tuesday. Shall I book that?", true, h)}
+  <g transform="translate(24,436)"><rect width="542" height="44" rx="12" fill="${HUE.emerald}" opacity=".16" stroke="${HUE.emerald}"/><text x="18" y="28" font-family="-apple-system,Inter,sans-serif" font-size="15" font-weight="600" fill="${HUE.emerald}">✓ Booked · Tue 10:30 · calendar + SMS confirmation</text></g>
+  <text x="24" y="510" font-family="ui-monospace,Menlo" font-size="12" fill="rgba(255,255,255,.45)">Twilio → Deepgram → Groq + RAG → Cal.com → Deepgram TTS</text>
+  <text x="566" y="510" text-anchor="end" font-family="ui-monospace,Menlo" font-size="12" fill="rgba(255,255,255,.45)">01:12</text>
+</g>`;
+
 const art = {
+  talkvane,
   tickly: seatGrid,
   houdini: arcSeats,
   tapreview: stars,
@@ -108,6 +130,7 @@ const art = {
 };
 
 const meta = {
+  talkvane: ["Talkvane", "AI receptionist · answers from your docs · books on Cal.com", "rose", "10"],
   tickly: ["Tickly", "Seat-map ticketing · 1,000+ seats · mutex locks", "blue", "01"],
   houdini: ["Houdini Tickets", "Real-time seat storefront · 500+ concurrent buyers", "violet", "02"],
   tapreview: ["TapReview", "QR → rating → generated review → Google", "amber", "03"],
@@ -138,8 +161,9 @@ const page = (slug) => {
 
 const b = await chromium.launch();
 const p = await b.newPage({ viewport: { width: 1200, height: 750 }, deviceScaleFactor: 1 });
-for (const slug of Object.keys(meta)) {
-  const f = `/tmp/thumb-${slug}.html`;
+const only = process.argv.slice(2); // `node scripts/thumbnails.mjs talkvane` renders one
+for (const slug of Object.keys(meta).filter((s) => !only.length || only.includes(s))) {
+  const f = join(tmpdir(), `thumb-${slug}.html`);
   writeFileSync(f, page(slug));
   await p.goto("file://" + f);
   await p.screenshot({ path: `${process.cwd()}/public/projects/${slug}.png`, type: "png" });

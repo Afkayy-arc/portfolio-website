@@ -58,6 +58,7 @@ export const projects: Project[] = [
   {
     slug: "talkvane",
     hue: "rose",
+    image: "/projects/talkvane.png",
     title: "Talkvane",
     summary:
       "Multi-tenant AI receptionist for small businesses. Answers the phone from the owner's own documents, books on Cal.com mid-call, texts a confirmation, and hands off to a human when asked. Twilio media streams into Pipecat with Deepgram and Groq, per-tenant row-level security, BYO LLM keys in Vault, Stripe metering with prepaid overage, and fraud gates on the outbound leg.",
