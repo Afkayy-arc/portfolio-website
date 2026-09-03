@@ -65,7 +65,7 @@ components/
   Rail, ThemeToggle, AskHero, LiveStatus, DemoCanvas, LiveDemos, ProjectStrips,
   ProjectList, BioToggle, TechStack, ExperienceList, ContactForm, CopyEmail,
   Footer, Terminal, Reveal (motion primitive), icons
-  demos/ (SeatMap, ClinicFlow, ReviewFlow, RagSearch, EtlPipeline, index)
+  demos/ (TalkvaneCall, SeatMap, ClinicFlow, ReviewFlow, RagSearch, EtlPipeline, index)
 constants/data.ts     all content, demo catalog, card ids
 lib/                  bus (events), email, rate limiter, validation, site URL
 public/CV/            downloadable CV

@@ -56,6 +56,16 @@ export const metrics = [
 
 export const projects: Project[] = [
   {
+    slug: "talkvane",
+    hue: "rose",
+    title: "Talkvane",
+    summary:
+      "Multi-tenant AI receptionist for small businesses. Answers the phone from the owner's own documents, books on Cal.com mid-call, texts a confirmation, and hands off to a human when asked. Twilio media streams into Pipecat with Deepgram and Groq, per-tenant row-level security, BYO LLM keys in Vault, Stripe metering with prepaid overage, and fraud gates on the outbound leg.",
+    tags: ["Next.js", "Python", "Pipecat", "Twilio", "Supabase", "Stripe"],
+    liveUrl: "https://talkvane.vercel.app",
+    featured: true,
+  },
+  {
     slug: "tickly",
     hue: "blue",
     image: "/projects/tickly.png",
@@ -227,6 +237,7 @@ export interface Demo {
 }
 
 export const demos: Demo[] = [
+  { id: "talkvane", hue: "rose", title: "AI call assistant", from: "Talkvane", blurb: "An inbound call answered from the knowledge base, booked on the calendar, confirmed by text.", tags: ["Pipecat", "Twilio", "RAG"], projectSlugs: ["talkvane"] },
   { id: "seatmap", hue: "blue", title: "Seat-map booking", from: "Tickly · Houdini Tickets", blurb: "Concurrent buyers, per-seat mutex locks, zero double-bookings.", tags: ["React", "canvas"], projectSlugs: ["tickly", "houdini"] },
   { id: "clinic", hue: "emerald", title: "Clinic automation", from: "DevMechanix", blurb: "An n8n flow from WhatsApp message to confirmed, reminded appointment.", tags: ["n8n", "LLM"], projectSlugs: ["clinic"] },
   { id: "tapreview", hue: "amber", title: "Review flow", from: "TapReview", blurb: "Half-star rating to a copied, editable Google review in three taps.", tags: ["JS"], projectSlugs: ["tapreview"] },

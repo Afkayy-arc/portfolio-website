@@ -14,9 +14,9 @@ type NodeDef = { id: string; x: number; y: number; icon: string; title: string; 
 
 const nodes: NodeDef[] = [
   { id: "trigger", kind: "trigger", x: 40, y: 236, icon: "⚡", hue: "emerald", title: "Visitor lands", body: `${personalInfo.location.split(",")[0]} · ${personalInfo.timezone}` },
-  ...demos.map((d, i) => ({ id: d.id, kind: "demo" as const, x: 360, y: 20 + i * 104, icon: ["▦", "◇", "★", "◎", "⇶"][i], title: d.title, body: d.blurb, hue: d.hue })),
-  { id: "run", kind: "out", x: 680, y: 150, icon: "▶", hue: "violet", title: "Run inline", body: "Selected demo mounts below the canvas." },
-  { id: "contact", kind: "out", x: 680, y: 380, icon: "✉", hue: "rose", title: "Contact", body: personalInfo.email },
+  ...demos.map((d, i) => ({ id: d.id, kind: "demo" as const, x: 360, y: 20 + i * 104, icon: ["☎", "▦", "◇", "★", "◎", "⇶"][i], title: d.title, body: d.blurb, hue: d.hue })),
+  { id: "run", kind: "out", x: 680, y: 200, icon: "▶", hue: "violet", title: "Run inline", body: "Selected demo mounts below the canvas." },
+  { id: "contact", kind: "out", x: 680, y: 430, icon: "✉", hue: "rose", title: "Contact", body: personalInfo.email },
 ];
 
 const wire = (a: Rect, b: Rect) => {
@@ -101,7 +101,7 @@ export default function DemoCanvas() {
         ) : (
           <>
             <div
-              className="dotgrid relative h-[560px] cursor-grab select-none overflow-hidden rounded-2xl border border-hairline bg-canvas shadow-[var(--panel-shadow)] active:cursor-grabbing"
+              className="dotgrid relative h-[664px] cursor-grab select-none overflow-hidden rounded-2xl border border-hairline bg-canvas shadow-[var(--panel-shadow)] active:cursor-grabbing"
               onPointerDown={onDown}
               onPointerMove={onMove}
               onPointerUp={onUp}
